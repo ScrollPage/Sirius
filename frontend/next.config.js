@@ -1,23 +1,18 @@
 const path = require('path');
-const Dotenv = require('dotenv-webpack');
-const withCSS = require('@zeit/next-css');
-const { locales, defaultLocale } = require('./i18n.json')
+const withPWA = require('next-pwa')
 
-const localeSubpaths = {
-	en: 'en',
-	ru: 'ru',
-}
-
-module.exports = withCSS();
-
-module.exports = {
-	i18n: {
-		locales,
-		defaultLocale,
+const nextConfig = {
+	pwa: {
+		disable: process.env.NODE_ENV === 'development',
+		// dest: 'public', // comment out this line
+		register: true,
+		sw: '/sw.js'
 	},
 	webpack: config => {
 		config.resolve.alias['@'] = path.resolve(__dirname);
-		config.plugins.push(new Dotenv({ silent: true }));
 		return config;
 	},
 };
+
+
+module.exports = withPWA(nextConfig)

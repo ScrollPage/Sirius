@@ -2,7 +2,6 @@
 
 # dependencies
 /node_modules
-/pages
 /.pnp
 .pnp.js
 
@@ -33,3 +32,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# workbox
+public/sw.js
+public/sw.js.map
+public/worker-*.js
+public/worker-*.js.map

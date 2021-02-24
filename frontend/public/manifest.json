@@ -1,0 +1,47 @@
+{
+  "name": "My project",
+  "short_name": "Short",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-16x16.png",
+      "type": "image/png",
+      "sizes": "16x16",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-32x32.png",
+      "type": "image/png",
+      "sizes": "32x32",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-64x64.png",
+      "type": "image/png",
+      "sizes": "64x64",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-128x128.png",
+      "type": "image/png",
+      "sizes": "128x128",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "type": "image/png",
+      "sizes": "256x256",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
