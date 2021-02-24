@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { $token } from '@/src/features/common'
 
 type Method = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
@@ -14,18 +14,16 @@ export const request = <T,>(method: Method, url: string, data: any = {}) => {
     'Content-Type': 'application/json',
     Authorization: `Token ${token}`
   } : {};
-
-  return new Promise<T>((resolve, reject) => {
-    instance({
+  return new Promise<T>(async (resolve, reject) => {
+    await instance({
       url,
       method,
       data: { ...data },
       headers
-    }).then((response) => {
+    }).then((response: AxiosResponse) => {
       resolve(response.data)
-    }).catch(err => {
-      console.log(err)
-      reject(err.message);
+    }).catch((err: AxiosError) => {
+      reject(err);
     })
   })
 }

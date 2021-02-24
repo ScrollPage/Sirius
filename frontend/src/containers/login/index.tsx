@@ -3,13 +3,14 @@ import { Input } from '@/src/ui/molecules/input';
 import { Container } from '@/src/ui/organisms';
 import { Col, Row } from '@/src/lib/styled-components-layout';
 import { Box, H3, Button, Link } from '@/src/ui/atoms';
-import { loginFetching, loginForm } from './model';
+import { loginProccesing, loginForm } from './model';
 import { useStore } from 'effector-react/ssr';
 import { useForm } from 'effector-forms';
 
 export const LoginContainer = () => {
   const { submit, eachValid } = useForm(loginForm);
-  const isLoading = useStore(loginFetching.isLoading);
+  const isLoading = useStore(loginProccesing.pending);
+  console.log('isLoading', isLoading);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

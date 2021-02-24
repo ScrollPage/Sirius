@@ -15,11 +15,13 @@ export const loginProccesing = app.createEffect<
   LoginResponse,
   Error
 >();
-export const loginFetching: Fetching<LoginResponse, Error> = createFetching(
-  loginProccesing
-);
+// export const loginFetching: Fetching<LoginResponse, Error> = createFetching(
+//   loginProccesing,
+// );
 
 loginProccesing.use((data) => accountApi.login(data));
+
+loginProccesing.pending.watch((data) => console.log('pending', data))
 
 loginProccesing.done.watch(({ result: { access } }) => {
   tokenChanged(access);
@@ -52,3 +54,4 @@ export const loginForm = createForm({
 })
 
 forward({ from: loginForm.formValidated, to: loginProccesing })
+
