@@ -1,0 +1,17 @@
+{
+  "register-your-account": "Register your account!",
+  "or-log-in-now": "or Log in now",
+  "email-adress": "Email adress:",
+  "username": "Username:",
+  "password": "Password:",
+  "confirm-password": "Confirm password:",
+  "enter-your-email-adress": "Enter your email adress",
+  "enter-your-username": "Enter your username",
+  "enter-your-password": "Enter your password",
+  "incorrect-email-adress": "Incorrect email adress",
+  "very-short-username": "Very short username",
+  "very-long-username": "Very long username",
+  "very-easy-password": "Very easy password",
+  "passwords-must-match": "Passwords must match",
+  "create-account": "Create account"
+}

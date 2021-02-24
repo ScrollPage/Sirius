@@ -1,0 +1,17 @@
+{
+  "register-your-account": "Зарегистрируйтесь!",
+  "or-log-in-now": "или войдите",
+  "email-adress": "Email:",
+  "username": "Имя:",
+  "password": "Пароль:",
+  "confirm-password": "Повторите пароль:",
+  "enter-your-email-adress": "Введите email",
+  "enter-your-username": "Введите имя",
+  "enter-your-password": "Введите пароль",
+  "incorrect-email-adress": "Некорректный email",
+  "very-short-username": "Слишком короткое имя",
+  "very-long-username": "Слишком длинное имя",
+  "very-easy-password": "Очень легкий пароль",
+  "passwords-must-match": "Пароли должны совпадать",
+  "create-account": "Создать аккаунт"
+}
