@@ -30,7 +30,7 @@ export const CabinetContainer = () => {
     <Container>
       <Box>
         <Col align="center">
-          <H3 center>Вас зовут: {user?.name}</H3>
+          <H3 center>Вас зовут: {user?.first_name}</H3>
           <Button onClick={openHandler}>Выйти</Button>
         </Col>
       </Box>

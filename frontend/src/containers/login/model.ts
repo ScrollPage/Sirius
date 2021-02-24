@@ -8,14 +8,10 @@ import Router from 'next/router'
 import { alertCalled } from '@/src/features/alert/model';
 import { createForm } from 'effector-forms';
 import { rules } from '@/src/lib/validate-rules';
+import { LoginData } from '@/src/api/account';
 
-export interface LoginFormValues {
-  email: string;
-  password: string;
-}
-
-const loginProccesing = app.createEffect<
-  LoginFormValues,
+export const loginProccesing = app.createEffect<
+  LoginData,
   LoginResponse,
   Error
 >();

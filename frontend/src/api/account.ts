@@ -6,10 +6,7 @@ export interface RegisterData {
   last_name: string;
   email: string;
   password: string;
-  phone_number: string;
-  is_steakholder: boolean;
-  company: string;
-  name: string;
+  sex: string | number;
 }
 
 export interface LoginData {
@@ -38,7 +35,7 @@ const activate = (token: string) => {
 }
 
 const getInfo = () => {
-  return request<IUser>("GET", "/api/initiative/me/");
+  return request<RegisterData>("GET", "/auth/users/me/");
 }
 
 export const accountApi = {

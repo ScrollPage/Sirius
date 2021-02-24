@@ -24,6 +24,7 @@ export const request = <T,>(method: Method, url: string, data: any = {}) => {
     }).then((response) => {
       resolve(response.data)
     }).catch(err => {
+      console.log(err)
       reject(err.message);
     })
   })
