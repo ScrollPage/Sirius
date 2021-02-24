@@ -9,12 +9,12 @@ class Examination(models.Model):
         Patient, verbose_name='Исследуемый', 
         related_name='exams', on_delete=models.CASCADE
     )
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, default='')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    diagnosis = models.TextField(max_length=500)
-    check_type = models.CharField(max_length=50)
-    clinic = models.CharField(max_length=100)
+    diagnosis = models.TextField(max_length=500, default='')
+    check_type = models.CharField(max_length=50, default='')
+    clinic = models.CharField(max_length=100, default='')
 
     def __str__(self):
         return f"{self.patient}'s examination"
@@ -30,9 +30,8 @@ class SubExam(models.Model):
         Examination, verbose_name='Исследование', 
         related_name='sub_exams', on_delete=models.CASCADE
     )
-    global_name = models.CharField(max_length=100)
-    check_type = models.CharField(max_length=50)
-    check_type = models.CharField(max_length=50)
+    global_name = models.CharField(max_length=100, default='')
+    check_type = models.CharField(max_length=50, default='')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -40,6 +39,6 @@ class SubExam(models.Model):
         return f'sub exam in {self.exam}'
 
     class Meta:
-        verbose_name = 'Исследование'
-        verbose_name_plural = 'Исследования'
+        verbose_name = 'Подъисследование'
+        verbose_name_plural = 'Подъисследование'
         db_table = 'port'

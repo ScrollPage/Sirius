@@ -7,13 +7,13 @@ from rest_framework.mixins import (
 
 from backend.core import (
     SerializerMixin, PermissionMixin, 
-    PermissionSerializerMixin
+    PermissionSerializerMixin, FastResponseMixin
 ) 
 
-class SRetrieveUpdateDestroyCreateViewSet(
-    SerializerMixin, UpdateModelMixin, 
-    RetrieveModelMixin, CreateModelMixin, 
-    DestroyModelMixin, GenericViewSet
+class SFRetrieveUpdateDestroyCreateViewSet(
+    SerializerMixin, UpdateModelMixin, FastResponseMixin, 
+    RetrieveModelMixin, DestroyModelMixin, CreateModelMixin, 
+    GenericViewSet
 ):
     '''
     Создание, обновление, удаление, просмотр одной записи

@@ -1,3 +1,6 @@
+from rest_framework import status
+from rest_framework.response import Response
+
 class PermissionMixin:
     '''Mixin permission для action'''
     def get_permissions(self):
@@ -17,3 +20,15 @@ class SerializerMixin:
 class PermissionSerializerMixin(PermissionMixin, SerializerMixin):
     '''Доп классы'''
     pass
+
+class FastResponseMixin:
+    '''Функция быстрого ответа'''
+
+    def fast_response(
+        self, field, status=status.HTTP_200_OK,
+        many=True, filtering='all'
+    ):
+        instance = self.get_object()
+        instances = getattr(getattr(instance, field), filtering)()
+        serializer = self.get_serializer(instances, many=True)
+        return Response(serializer.data, status=status)

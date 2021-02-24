@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Examination, SubExam
+
+admin.site.register(Examination)
+admin.site.register(SubExam)
