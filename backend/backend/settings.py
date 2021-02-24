@@ -190,3 +190,9 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(days=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+# Cors
+CORS_ORIGIN_WHITELIST = (
+    u'http://127.0.0.1:3000',
+    u'http://localhost:3000'
+)

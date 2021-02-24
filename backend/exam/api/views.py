@@ -1,8 +1,10 @@
-from .service import SFRetrieveUpdateDestroyCreateViewSet
 from rest_framework import permissions, status
 from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404 
 
+from .service import SFRetrieveUpdateDestroyCreateViewSet
 from .serializers import ExamSerializer, SubExamSerializer
+from metric.api.serializers import SequenceSerializer
 from exam.models import Examination
 
 class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
@@ -10,7 +12,7 @@ class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     Создание, удаление, обновление, обзор одного исследования
     '''
 
-    serializer_class =  ExamSerializer
+    serializer_class = ExamSerializer
     serializer_class_by_action = {
         'sub': SubExamSerializer
     }
@@ -28,9 +30,9 @@ class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
         return self.fast_response('sub_exams')
 
 class SubExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
-    serializer_class =  ExamSerializer
+    serializer_class = SubExamSerializer
     serializer_class_by_action = {
-
+        'sequence': SequenceSerializer
     }
     permissions_classes = [permissions.IsAuthenticated]
 
@@ -38,4 +40,10 @@ class SubExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
         return SubExam.objects.all()
 
     def perform_create(self, serializer):
-        serializer.save(patient=self.request.user)
+        exam = get_object_or_404(Examination, id=self.request.data.get('exam'))
+        serializer.save(global_name=exam.name)
+
+    @action(detail=True, methods=['get'])
+    def sequence(self, request, *args, **kwargs):
+        '''Временные ряды исследования'''
+        return self.fast_response('sequences')
