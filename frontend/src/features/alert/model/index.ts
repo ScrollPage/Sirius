@@ -20,4 +20,4 @@ export const $alertLabel = $alert.map(({ label }) => label);
 
 $alert
   .on(alertCalled, (_, data) => data)
-  .reset(alertClosed)
+  .on(alertClosed, () => ({ kind: null, label: null }))
