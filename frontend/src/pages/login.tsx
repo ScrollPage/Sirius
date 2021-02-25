@@ -1,8 +1,7 @@
 import { LoginContainer } from '@/src/containers/login';
 import React from 'react';
 import Head from 'next/head';
-import { fork, serialize } from 'effector';
-import { app, CommonContentTemplate } from '@/src/features/common';
+import { CommonContentTemplate, serializeScope } from '@/src/features/common';
 import { ensureAuth } from '@/src/features/common/lib/ensure';
 
 export default function Login() {
@@ -18,10 +17,10 @@ export default function Login() {
 
 export const getServerSideProps = async (ctx) => {
   ensureAuth(ctx, 'auth');
-  const scope = fork(app);
+  const { serializedScope } = await serializeScope(ctx);
   return {
     props: {
-      initialState: serialize(scope, { onlyChanges: true }),
+      initialState: serializedScope,
     },
   };
 };

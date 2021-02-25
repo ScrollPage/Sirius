@@ -2,7 +2,7 @@ import { app } from '@/src/features/common'
 import Cookie from 'js-cookie'
 import Router from 'next/router'
 import { sample } from 'effector'
-
+import { sessionDropped } from './session'
 
 const SESSION_TIME = 24 * 3600 * 1000
 // const SESSION_TIME = 1 * 30 * 1000
@@ -30,6 +30,7 @@ checkAuthTimout.watch((expirationTime) => setTimeout(() => logout(), expirationT
 
 logout.watch(() => {
   tokenDropped();
+  sessionDropped()
   Router.push({ pathname: '/' }, undefined, { shallow: false });
 });
 

@@ -1,5 +1,4 @@
-import { fork, serialize } from 'effector';
-import { app, CommonContentTemplate } from '@/src/features/common';
+import { CommonContentTemplate, serializeScope } from '@/src/features/common';
 import { ensureAuth } from '@/src/features/common/lib/ensure';
 import Head from 'next/head';
 import { HomeContainer } from '../containers/home';
@@ -21,10 +20,10 @@ export default function Home() {
 
 export const getServerSideProps = async (ctx) => {
   ensureAuth(ctx, 'public');
-  const scope = fork(app);
+  const { serializedScope } = await serializeScope(ctx);
   return {
     props: {
-      initialState: serialize(scope, { onlyChanges: true }),
+      initialState: serializedScope,
     },
   };
 };

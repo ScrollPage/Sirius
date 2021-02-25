@@ -2,15 +2,28 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { Container, Link } from '@/src/ui';
 import { useRouter } from 'next/router';
+import { $isAuthenticated } from '../model/token';
+import { useStore } from 'effector-react/ssr';
 
 export const Header = () => {
+  const isAuthenticated = useStore($isAuthenticated);
   return (
     <Wrapper>
       <Container>
         <Inner>
           <Nav>
             <NavLink href="/" label="Главная" />
-            <NavLink href="/cabinet" label="Данные" />
+            {isAuthenticated && <NavLink href="/cabinet" label="Данные" />}
+          </Nav>
+          <Nav>
+            {isAuthenticated ? (
+              'Выход'
+            ) : (
+              <>
+                <NavLink href="/login" label="Вход" />
+                <NavLink href="/register" label="Регистрация" />
+              </>
+            )}
           </Nav>
         </Inner>
       </Container>
