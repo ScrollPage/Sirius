@@ -22,6 +22,10 @@ export const Button = styled.button<{ width?: string }>`
   border: 1px solid #000;
   justify-content: center;
   align-items: center;
+  &:hover {
+    border: 1px solid #1890ff;
+    color: #1890ff;
+  }
   &:disabled {
     pointer-events: none;
     cursor: not-allowed;

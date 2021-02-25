@@ -17,12 +17,10 @@ export const ErrorContainer = () => {
 
   return (
     <Container>
-      <Box>
-        <Col align="center" gap="20px">
-          <H3>Страница не найдена</H3>
-          <p>Вы будете перенаправлены на главную страницу</p>
-        </Col>
-      </Box>
+      <Col align="center" gap="20px">
+        <H3>Страница не найдена</H3>
+        <p>Вы будете перенаправлены на главную страницу</p>
+      </Col>
     </Container>
   );
 };

@@ -25,12 +25,12 @@ export const Link: React.FC<LinkProps> = ({
 };
 
 const StyledA = styled.a<{ isActive?: boolean; size?: number }>`
+  color: ${({ isActive }) => (isActive ? '#1890ff' : '#000')};
+  font-size: ${({ size }) => (size ? size : 16)}px;
   font-style: normal;
   font-weight: normal;
-  font-size: ${({ size }) => (size ? size : 16)}px;
   line-height: 14px;
-  color: #000;
   &:hover {
-    color: blue;
+    color: #1890ff;
   }
 `;

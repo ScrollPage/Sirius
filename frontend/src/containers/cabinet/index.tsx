@@ -1,4 +1,3 @@
-import { alertCalled } from '@/src/features/alert';
 import { $session, chechAuthState } from '@/src/features/common';
 import { logout } from '@/src/features/common';
 import { modalOpened } from '@/src/features/modal';
@@ -13,7 +12,6 @@ export const CabinetContainer = () => {
   const logoutEvent = useEvent(logout);
   const chechAuthStateEvent = useEvent(chechAuthState);
   const modalOpenedEvent = useEvent(modalOpened);
-  const alertCalledEvent = useEvent(alertCalled);
 
   const openHandler = () => {
     modalOpenedEvent({
@@ -30,22 +28,10 @@ export const CabinetContainer = () => {
 
   return (
     <Container>
-      <Box>
-        <Col align="center">
-          <H3 center>Вас зовут: {user?.first_name}</H3>
-          <Button onClick={openHandler}>Выйти</Button>
-          <Button
-            onClick={() =>
-              alertCalledEvent({
-                kind: 'success',
-                label: 'asd',
-              })
-            }
-          >
-            Alert
-          </Button>
-        </Col>
-      </Box>
+      <Col align="center">
+        <H3 center>Вас зовут: {user?.first_name}</H3>
+        <Button onClick={openHandler}>Выйти</Button>
+      </Col>
     </Container>
   );
 };
