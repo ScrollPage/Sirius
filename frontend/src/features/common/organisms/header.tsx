@@ -2,10 +2,11 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { Container, Link } from '@/src/ui';
 import { useRouter } from 'next/router';
-import { $isAuthenticated } from '../model/token';
-import { useStore } from 'effector-react/ssr';
+import { $isAuthenticated, logout } from '../model/token';
+import { useEvent, useStore } from 'effector-react/ssr';
+import { modalOpened } from '../../modal';
 
-export const Header = () => {
+export const Header: React.FC = () => {
   const isAuthenticated = useStore($isAuthenticated);
   return (
     <Wrapper>
@@ -17,7 +18,7 @@ export const Header = () => {
           </Nav>
           <Nav>
             {isAuthenticated ? (
-              'Выход'
+              <LogoutLink />
             ) : (
               <>
                 <NavLink href="/login" label="Вход" />
@@ -29,6 +30,36 @@ export const Header = () => {
       </Container>
     </Wrapper>
   );
+};
+
+interface NavLinkProps {
+  href: string;
+  label: string;
+}
+
+const NavLink: React.FC<NavLinkProps> = ({ href, label }) => {
+  const { pathname } = useRouter();
+
+  return (
+    <Link href={href} isActive={pathname === href}>
+      {label}
+    </Link>
+  );
+};
+
+const LogoutLink: React.FC = () => {
+  const logoutEvent = useEvent(logout);
+  const modalOpenedEvent = useEvent(modalOpened);
+
+  const openHandler = () => {
+    modalOpenedEvent({
+      kind: 'logout',
+      props: {
+        onLogout: logoutEvent,
+      },
+    });
+  };
+  return <LogoutWrapper onClick={openHandler}>Выход</LogoutWrapper>;
 };
 
 const Wrapper = styled.div`
@@ -51,17 +82,9 @@ const Nav = styled.div`
   }
 `;
 
-interface NavLinkProps {
-  href: string;
-  label: string;
-}
-
-const NavLink: React.FC<NavLinkProps> = ({ href, label }) => {
-  const { pathname } = useRouter();
-
-  return (
-    <Link href={href} isActive={pathname === href}>
-      {label}
-    </Link>
-  );
-};
+const LogoutWrapper = styled.div`
+  cursor: pointer;
+  &:hover {
+    color: #1890ff;
+  }
+`;

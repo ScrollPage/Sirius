@@ -12,11 +12,13 @@ interface Props {
 export const CommonContentTemplate: React.FC<Props> = ({
   header,
   children,
-}) => (
-  <MainTemplate header={header}>
-    <CommonContent>{children}</CommonContent>
-  </MainTemplate>
-);
+}) => {
+  return (
+    <MainTemplate header={header}>
+      <CommonContent>{children}</CommonContent>
+    </MainTemplate>
+  );
+};
 
 CommonContentTemplate.defaultProps = {
   header: <Header />,

@@ -1,12 +1,13 @@
 import React from 'react';
 import Head from 'next/head';
 import { CabinetContainer } from '@/src/containers/cabinet';
-import { CommonContentTemplate } from '@/src/features/common';
+import { CommonContentTemplate, useCheckAuth } from '@/src/features/common';
 import { serializeScope } from '@/src/features/common';
 import { GetServerSideProps } from 'next';
 import { ensureAuth } from '@/src/features/common/lib/ensure';
 
 export default function Cabinet() {
+  useCheckAuth();
   return (
     <CommonContentTemplate>
       <Head>

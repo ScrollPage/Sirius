@@ -15,7 +15,6 @@
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
     "@stitches/react": "0.0.2",
-    "@zeit/next-css": "^1.0.1",
     "antd": "^4.12.3",
     "axios": "^0.21.1",
     "cookie": "^0.4.1",
