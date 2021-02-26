@@ -18,15 +18,11 @@ export interface LoginResponse {
 }
 
 const signup = (data: RegisterData) => {
-  return request<void>("POST", '/auth/users/', {
-    ...data
-  });
+  return request<void>("POST", '/auth/users/', data);
 }
 
 const login = (data: LoginData) => {
-  return request<LoginResponse>("POST", '/auth/jwt/create/', {
-    ...data
-  });
+  return request<LoginResponse>("POST", '/auth/jwt/create/', data);
 }
 
 const getInfo = () => {

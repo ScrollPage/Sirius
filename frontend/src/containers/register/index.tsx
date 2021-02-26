@@ -1,23 +1,23 @@
 import React, { FormEvent } from 'react';
-import { DatePicker, Select } from 'antd';
 import { Input } from '@/src/ui/molecules/input';
 import { Container } from '@/src/ui/organisms';
 import { Col, Row } from '@/src/lib/styled-components-layout';
-import { Box, H3, Button, Link } from '@/src/ui/atoms';
+import { H3, Button, Link } from '@/src/ui/atoms';
 import { registerFetching, registerForm } from './model';
 import { useStore } from 'effector-react/ssr';
-import { useForm } from 'effector-forms';
-import moment from 'moment';
+import { useField, useForm } from 'effector-forms';
+import format from 'dayjs';
+import { DatePicker } from '@/src/ui';
+import Select from 'antd/lib/select';
+import { Field } from 'effector-forms/dist/types';
+
+import { ConfigProvider } from 'antd';
+import ruRU from 'antd/lib/locale/ru_RU';
 
 const { Option } = Select;
-const dateFormat = 'YYYY-MM-DD';
-
-function disabledDate(current) {
-  return current && current > moment().endOf('day');
-}
 
 export const RegisterContainer = () => {
-  const { submit, eachValid, fields } = useForm(registerForm);
+  const { submit, eachValid } = useForm(registerForm);
   const isLoading = useStore(registerFetching.isLoading);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -53,21 +53,8 @@ export const RegisterContainer = () => {
             name="password"
             placeholder="Пароль"
           />
-          <Select
-            style={{ width: 218, marginBottom: '21px' }}
-            value={fields.sex.value}
-            onChange={(value) => fields.sex.onChange(value)}
-          >
-            <Option value="0">Пацан</Option>
-            <Option value="1">Девочка</Option>
-          </Select>
-          <DatePicker
-            style={{ width: 218, marginBottom: '21px' }}
-            format={dateFormat}
-            disabledDate={disabledDate}
-            value={moment(fields.birth_date.value, dateFormat)}
-            onChange={(_, value) => fields.birth_date.onChange(value)}
-          />
+          <RegisterSelect field={registerForm.fields.sex} />
+          <RegisterDatePicker field={registerForm.fields.birth_date} />
           <Button type="submit" disabled={isLoading || !eachValid}>
             Подтвердить
           </Button>
@@ -77,5 +64,45 @@ export const RegisterContainer = () => {
         </Col>
       </form>
     </Container>
+  );
+};
+
+interface PropsWIthField {
+  field: Field<any>;
+}
+
+const RegisterSelect: React.FC<PropsWIthField> = ({ field }) => {
+  const { value, onChange } = useField(field);
+  return (
+    <Select
+      placeholder="Выберите пол"
+      style={{ width: 218, marginBottom: '21px' }}
+      value={value ? value : undefined}
+      onChange={(value) => onChange(value)}
+    >
+      <Option value="0">Пацан</Option>
+      <Option value="1">Девочка</Option>
+    </Select>
+  );
+};
+
+const dateFormat = 'YYYY-MM-DD';
+
+function disabledDate(current) {
+  return current && current > format().endOf('day');
+}
+
+const RegisterDatePicker: React.FC<PropsWIthField> = ({ field }) => {
+  const { value, onChange } = useField(field);
+  return (
+    <ConfigProvider locale={ruRU}>
+      <DatePicker
+        style={{ width: 218, marginBottom: '21px' }}
+        format={dateFormat}
+        disabledDate={disabledDate}
+        value={value ? format(value, dateFormat) : undefined}
+        onChange={(_, value) => onChange(value)}
+      />
+    </ConfigProvider>
   );
 };

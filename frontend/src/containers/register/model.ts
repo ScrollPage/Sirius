@@ -30,13 +30,13 @@ export const registerForm = createForm({
   domain: app,
   fields: {
     sex: {
-      init: "0" as string,
+      init: "" as string,
       rules: [
         rules.required(),
       ],
     },
     birth_date: {
-      init: "2020-01-01" as string,
+      init: "" as string,
       rules: [
         rules.required(),
       ],
