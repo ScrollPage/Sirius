@@ -1,12 +1,12 @@
 import { createFetching, Fetching } from '@/src/lib/fetching'
-import { accountApi, RegisterData } from '@/src/api/account'
+import { accountApi, Register, RegisterData } from '@/src/api/account'
 import { app } from '@/src/features/common'
 
-export const loadSession = app.createEffect<void, RegisterData, Error>()
+export const loadSession = app.createEffect<void, Register, Error>()
 export const sessionDropped = app.createEvent()
-const sessionFetching: Fetching<RegisterData, Error> = createFetching(loadSession)
+const sessionFetching: Fetching<Register, Error> = createFetching(loadSession)
 
-export const $session = app.createStore<RegisterData>(null)
+export const $session = app.createStore<Register>(null)
 
 loadSession.use(() => accountApi.getInfo())
 

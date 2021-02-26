@@ -8,6 +8,10 @@ export interface RegisterData {
   sex: string | number;
 }
 
+export interface Register extends RegisterData {
+  id: number;
+}
+
 export interface LoginData {
   email: string;
   password: string;
@@ -26,7 +30,7 @@ const login = (data: LoginData) => {
 }
 
 const getInfo = () => {
-  return request<RegisterData>("GET", "/auth/users/me/");
+  return request<Register>("GET", "/auth/users/me/");
 }
 
 export const accountApi = {

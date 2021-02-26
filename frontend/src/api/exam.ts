@@ -9,30 +9,37 @@ export interface ExamData {
 
 export interface Exam extends ExamData {
   id: number;
-  created: Date;
-  updated: Date;
+  created: string;
+  updated: string;
 }
 
-export const addExam = (data: ExamData) => {
+const addExam = (data: ExamData) => {
   return request('POST', `/api/exam/`, data)
 }
 
-export const getExam = (examId: number) => {
+const getExam = (examId: number) => {
   return request<Exam[]>('GET', `/api/exam/${examId}/`)
 }
 
-export const changeExam = (examId: number, data: ExamData) => {
+const changeExam = (examId: number, data: ExamData) => {
   return request('PATCH', `/api/exam/${examId}/`, data)
 }
 
-export const deleteExam = (examId: number) => {
+const deleteExam = (examId: number) => {
   return request('DELETE', `/api/exam/${examId}/`)
 }
 
-export const getPatientExams = (patientId: number) => {
+const getPatientExams = (patientId: number) => {
   return request<Exam[]>('GET', `/api/patient/${patientId}/exam/`)
 }
 
+export const examApi = {
+  addExam,
+  getExam,
+  changeExam,
+  deleteExam,
+  getPatientExams,
+}
 
 
 
