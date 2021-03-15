@@ -7,8 +7,6 @@ from .serializers import ExamSerializer, SubExamSerializer
 from metric.api.serializers import SequenceSerializer
 from exam.models import Examination
 
-from django.views.decorators.cache import cache_page
-
 class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     '''
     Создание, удаление, обновление, обзор одного исследования
