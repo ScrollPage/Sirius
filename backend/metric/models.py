@@ -21,7 +21,7 @@ class Sequence(models.Model):
     class Meta:
         verbose_name = 'Последовательность'
         verbose_name_plural = 'Последовательности'
-        db_table = 'sequence'
+        db_table = 'sequence_v2'
 
 class Point(models.Model):
     '''Точка в последовательности измерений'''
@@ -44,7 +44,7 @@ class Point(models.Model):
     class Meta:
         verbose_name = 'Точка'
         verbose_name_plural = 'Точки'
-        db_table = 'point'
+        db_table = 'point_v2'
 
 class Value(models.Model):
     '''Значение в послежовательности измерений'''
@@ -61,4 +61,4 @@ class Value(models.Model):
     class Meta:
         verbose_name = 'Значение'
         verbose_name_plural = 'Значения'
-        db_table = 'value'
+        db_table = 'value_v2'

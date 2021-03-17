@@ -102,23 +102,23 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('SQL_ENGINE', local.SQL_ENGINE),
-        'NAME': os.environ.get('SQL_DATABASE', local.SQL_DATABASE),
-        'USER': os.environ.get('SQL_USER', local.SQL_USER),
-        'PASSWORD': os.environ.get('SQL_PASSWORD', local.SQL_PASSWORD),
-        'HOST': os.environ.get('SQL_HOST', local.SQL_HOST),
-        'PORT': os.environ.get('SQL_PORT', local.SQL_PORT),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.environ.get('SQL_ENGINE', local.SQL_ENGINE),
+#         'NAME': os.environ.get('SQL_DATABASE', local.SQL_DATABASE),
+#         'USER': os.environ.get('SQL_USER', local.SQL_USER),
+#         'PASSWORD': os.environ.get('SQL_PASSWORD', local.SQL_PASSWORD),
+#         'HOST': os.environ.get('SQL_HOST', local.SQL_HOST),
+#         'PORT': os.environ.get('SQL_PORT', local.SQL_PORT),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -157,9 +157,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# User
-AUTH_USER_MODEL = 'patient.Patient'
 
 #Domains
 DJANGO_DOMAIN = 'http://127.0.0.1:8000'

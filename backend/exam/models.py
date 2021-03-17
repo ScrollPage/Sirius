@@ -22,7 +22,7 @@ class Examination(models.Model):
     class Meta:
         verbose_name = 'Исследование'
         verbose_name_plural = 'Исследования'
-        db_table = 'examination'
+        db_table = 'examination_v2'
 
 class SubExam(models.Model):
     '''Промежуточное исследование'''
@@ -41,4 +41,4 @@ class SubExam(models.Model):
     class Meta:
         verbose_name = 'Подъисследование'
         verbose_name_plural = 'Подъисследование'
-        db_table = 'port'
+        db_table = 'port_v2'

@@ -7,7 +7,6 @@ class ExamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Examination
-        exclude = ['patient']
         read_only_fields = ['created', 'updated']
 
 class SubExamSerializer(serializers.ModelSerializer):

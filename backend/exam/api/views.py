@@ -21,9 +21,6 @@ class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     def get_queryset(self):
         return Examination.objects.all()
 
-    def perform_create(self, serializer):
-        serializer.save(patient=self.request.user)
-
     @action(detail=True, methods=['get'])
     def sub(self, request, *args, **kwargs):
         '''Подъисследования в исследовании'''

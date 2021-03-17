@@ -1,14 +1,20 @@
-from rest_framework.viewsets import GenericViewSet
 from rest_framework.decorators import action
 from rest_framework import permissions
 
 from patient.models import Patient
+from .service import PFListCreateViewSet
+from .serializers import PatientSerializer
+
 from backend.core import FastResponseMixin
 from exam.api.serializers import ExamSerializer
 
-class PatientViewSet(FastResponseMixin, GenericViewSet):
+
+class PatientViewSet(PFListCreateViewSet):
     '''Все про пациента'''
-    serializer_class = ExamSerializer
+    serializer_class = PatientSerializer
+    serializer_class_by_action = {
+        'exam': ExamSerializer 
+    }
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
