@@ -1,15 +1,15 @@
 import { request } from '@/src/features/common'
-import { IUser } from '../types/user';
 
 export interface RegisterData {
   first_name: string;
   last_name: string;
   email: string;
   password: string;
-  phone_number: string;
-  is_steakholder: boolean;
-  company: string;
-  name: string;
+  sex: string | number;
+}
+
+export interface Register extends RegisterData {
+  id: number;
 }
 
 export interface LoginData {
@@ -22,28 +22,19 @@ export interface LoginResponse {
 }
 
 const signup = (data: RegisterData) => {
-  return request<void>("POST", '/auth/users/', {
-    ...data
-  });
+  return request<void>("POST", '/auth/users/', data);
 }
 
 const login = (data: LoginData) => {
-  return request<LoginResponse>("POST", '/auth/jwt/create/', {
-    ...data
-  });
-}
-
-const activate = (token: string) => {
-  return request("POST", '/api/activate/', { token });
+  return request<LoginResponse>("POST", '/auth/jwt/create/', data);
 }
 
 const getInfo = () => {
-  return request<IUser>("GET", "/api/initiative/me/");
+  return request<Register>("GET", "/auth/users/me/");
 }
 
 export const accountApi = {
   signup,
   login,
-  activate,
   getInfo
 }

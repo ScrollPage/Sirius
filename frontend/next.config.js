@@ -1,5 +1,10 @@
 const path = require('path');
 const withPWA = require('next-pwa')
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+	enabled: process.env.ANALYZE === 'true',
+})
+
+const compose = (...fns) => x => fns.reduceRight((acc, fn) => fn(acc), x);
 
 const nextConfig = {
 	pwa: {
@@ -14,5 +19,6 @@ const nextConfig = {
 	},
 };
 
+const withCompose = compose(withPWA, withBundleAnalyzer)
 
-module.exports = withPWA(nextConfig)
+module.exports = withCompose(nextConfig)

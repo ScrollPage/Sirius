@@ -36,7 +36,7 @@ export const DefaultModal: React.FC<DefaultModalType> = ({
       {onDelete && (
         <CellButtonYes>
           <Button width="100%" onClick={onDeleteHandler}>
-            Yes
+            Да
           </Button>
         </CellButtonYes>
       )}
@@ -44,7 +44,7 @@ export const DefaultModal: React.FC<DefaultModalType> = ({
       {onClose && (
         <CellButtonNo>
           <Button width="100%" onClick={onClose}>
-            No
+            Нет
           </Button>
         </CellButtonNo>
       )}
@@ -55,7 +55,7 @@ export const DefaultModal: React.FC<DefaultModalType> = ({
 const GridPopUp = styled.div`
   display: grid;
   grid-template-rows: 2rem 1fr 2rem;
-  /* grid-template-columns: repeat(2, 1fr); */
+  grid-template-columns: repeat(2, 1fr);
   grid-gap: 1rem;
   grid-template-areas:
     'popupTitle popupTitle'
@@ -74,6 +74,7 @@ const CellTitle = styled.div`
 const CellContent = styled.div`
   grid-area: popupContent;
   padding: 30px 0;
+  text-align: center;
 `;
 
 const CellButtonYes = styled.div`

@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 export const Container = styled.div`
   padding: 0 15px;
   width: 100%;
+  height: 100%;
   @media (min-width: 575.98px) {
     padding: 0 calc(50vw - 270px);
   }

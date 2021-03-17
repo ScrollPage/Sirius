@@ -13,6 +13,10 @@ export const Inner = styled.input<{ isShowError?: boolean }>`
   font-weight: normal;
   font-size: 12px;
   line-height: 15px;
+  transition: all 0.3s ease;
+  &:hover, &:active, &:focus {
+    border: 1px solid #1890ff;
+  }
   ::placeholder {
     font-style: normal;
     font-weight: normal;

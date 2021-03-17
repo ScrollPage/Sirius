@@ -11,7 +11,7 @@ export const LogoutModal: React.FC<LogoutModalProps> = ({
 }) => {
   return (
     <DefaultModal title="Выход" onClose={onClose} onDelete={onLogout}>
-      Do you really want to leave?
+      Вы действительно хотите выйти?
     </DefaultModal>
   );
 };

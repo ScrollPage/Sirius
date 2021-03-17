@@ -5,30 +5,26 @@ import { createFetching, Fetching } from '@/src/lib/fetching';
 import { accountApi } from '@/src/api/account';
 import { forward } from 'effector';
 import Router from 'next/router'
-import { alertCalled } from '@/src/features/alert/model';
 import { createForm } from 'effector-forms';
 import { rules } from '@/src/lib/validate-rules';
+import { LoginData } from '@/src/api/account';
 
-export interface LoginFormValues {
-  email: string;
-  password: string;
-}
-
-const loginProccesing = app.createEffect<
-  LoginFormValues,
+export const loginProccesing = app.createEffect<
+  LoginData,
   LoginResponse,
   Error
 >();
-export const loginFetching: Fetching<LoginResponse, Error> = createFetching(
-  loginProccesing
-);
+// export const loginFetching: Fetching<LoginResponse, Error> = createFetching(
+//   loginProccesing,
+// );
 
 loginProccesing.use((data) => accountApi.login(data));
+
+loginProccesing.pending.watch((data) => console.log('pending', data))
 
 loginProccesing.done.watch(({ result: { access } }) => {
   tokenChanged(access);
   loginForm.reset();
-  alertCalled({ kind: 'success', label: 'Вы успешно вошли!' })
   Router.push({ pathname: '/cabinet' }, undefined, { shallow: false });
 });
 
@@ -56,3 +52,4 @@ export const loginForm = createForm({
 })
 
 forward({ from: loginForm.formValidated, to: loginProccesing })
+

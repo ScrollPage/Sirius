@@ -1,39 +1,39 @@
-import { $session, chechAuthState } from '@/src/features/common';
-import { logout } from '@/src/features/common';
-import { modalOpened } from '@/src/features/modal';
+import { $session } from '@/src/features/common';
+import { ExamsList } from '@/src/features/exam';
 import { Col } from '@/src/lib/styled-components-layout';
-import { Box, Button, H3 } from '@/src/ui/atoms';
+import { H1, H2 } from '@/src/ui/atoms';
 import { Container } from '@/src/ui/organisms';
-import { useStore, useEvent } from 'effector-react/ssr';
-import React, { useEffect } from 'react';
+import { useStore } from 'effector-react/ssr';
+import React from 'react';
+import { $examsIds, examsFetching } from './model';
 
 export const CabinetContainer = () => {
   const user = useStore($session);
-  const logoutEvent = useEvent(logout);
-  const chechAuthStateEvent = useEvent(chechAuthState);
-  const modalOpenedEvent = useEvent(modalOpened);
+  const isFailed = useStore(examsFetching.isFailed);
+  const examIds = useStore($examsIds);
 
-  const openHandler = () => {
-    modalOpenedEvent({
-      kind: 'logout',
-      props: {
-        onLogout: logoutEvent,
-      },
-    });
-  };
-
-  useEffect(() => {
-    chechAuthStateEvent();
-  }, []);
+  if (isFailed) {
+    return (
+      <Col align="center">
+        <H2 center>Ошибка. Попробуйте позже</H2>
+      </Col>
+    );
+  }
 
   return (
     <Container>
-      <Box>
-        <Col align="center">
-          <H3 center>Вас зовут: {user?.name}</H3>
-          <Button onClick={openHandler}>Выйти</Button>
-        </Col>
-      </Box>
+      <Col align="center">
+        <H1 center>Вас зовут: {user?.first_name}</H1>
+        <H2 center>Ваши исследования</H2>
+        <ExamsList
+          ids={examIds}
+          renderEmpty={() => (
+            <Col align="center">
+              <H2 center>У вас пока нет исследований</H2>
+            </Col>
+          )}
+        />
+      </Col>
     </Container>
   );
 };

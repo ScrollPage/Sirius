@@ -62,6 +62,7 @@ export default function MyApp(props: AppProps) {
         <Alert />
         <MainModal />
         <Global styles={globalStyles} />
+
         <Component {...pageProps} />
       </React.Fragment>
     </EffectorProvider>

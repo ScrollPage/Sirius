@@ -2,9 +2,8 @@ import {
   Effect,
   Event,
   Store,
-  createEvent,
-  createStore,
 } from "effector"
+import { app } from '@/src/features/common/index'
 
 type Status = "initial" | "loading" | "done" | "fail"
 type Params<R, E, Rs> = {
@@ -29,21 +28,21 @@ export function createFetching<Pr, Result, Err, Reset>(
   initialStatus: Status = "initial",
   params: Params<Result, Err, Reset> = {},
 ): Fetching<Result, Err> {
-  const customReset = params.reset || createEvent<Reset>()
+  const customReset = params.reset || app.createEvent<Reset>()
 
-  const result: Store<OrUndefined<Result>> = createStore(params.result || null)
+  const result: Store<OrUndefined<Result>> = app.createStore(params.result || null)
     .reset(effect)
     .reset(effect.fail)
     .reset(customReset)
     .on(effect.done, (_, { result: value }) => value)
 
-  const error: Store<OrUndefined<Err>> = createStore(params.error || null)
+  const error: Store<OrUndefined<Err>> = app.createStore(params.error || null)
     .reset(effect)
     .reset(effect.done)
     .reset(customReset)
     .on(effect.fail, (_, { error: value }) => value)
 
-  const status: Store<Status> = createStore(initialStatus)
+  const status: Store<Status> = app.createStore(initialStatus)
     .on(effect, () => "loading")
     .on(effect.done, () => "done")
     .on(effect.fail, () => "fail")
