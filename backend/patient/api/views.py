@@ -16,6 +16,9 @@ class PatientViewSet(PFListCreateViewSet):
         'exam': ExamSerializer 
     }
     permission_classes = [permissions.IsAuthenticated]
+    permission_classes_by_action = {
+
+    }
 
     def get_queryset(self):
         return Patient.objects.all()

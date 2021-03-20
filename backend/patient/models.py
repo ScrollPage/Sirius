@@ -14,14 +14,12 @@ from .service import send_activation_email
 
 class Patient(models.Model):
     '''Кастомная модель пользователя'''
-    email = models.EmailField('Почта', max_length=60, unique=True)
-    birth_date = models.DateField('Дата рождения')
-    first_name = models.CharField('Имя', max_length=30)
-    last_name = models.CharField('Фамилия', max_length=30)
+    birth_date = models.DateField('Дата рождения', null=True)
+    first_name = models.CharField('Имя', max_length=30, null=True)
+    last_name = models.CharField('Фамилия', max_length=30, null=True)
     created = models.DateTimeField('Создан', auto_now_add=True)
     updated = models.DateTimeField('Обновлен', auto_now=True)
     sex = models.BooleanField('Пол', default=True)
-    is_staff = models.BooleanField(default=False)
 
     def __str__(self):
         return self.full_name
@@ -29,7 +27,7 @@ class Patient(models.Model):
     class Meta:
         verbose_name = 'Пациент'
         verbose_name_plural = 'Пациенты'
-        db_table = 'patient_v2'
+        db_table = 'patient'
 
     @property
     def full_name(self):

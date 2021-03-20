@@ -7,6 +7,7 @@ class ExamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Examination
+        fields = '__all__'
         read_only_fields = ['created', 'updated']
 
 class SubExamSerializer(serializers.ModelSerializer):
@@ -14,7 +15,7 @@ class SubExamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubExam
-        exclude = ['global_name']
+        fields = '__all__'
         read_only_fields = ['created', 'updated']
         extra_kwargs = {
             'exam': {'write_only': True}

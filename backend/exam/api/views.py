@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from .service import SFRetrieveUpdateDestroyCreateViewSet
 from .serializers import ExamSerializer, SubExamSerializer
 from metric.api.serializers import SequenceSerializer
-from exam.models import Examination
+from exam.models import Examination, SubExam
 
 class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     '''

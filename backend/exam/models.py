@@ -9,12 +9,11 @@ class Examination(models.Model):
         Patient, verbose_name='Исследуемый', 
         related_name='exams', on_delete=models.CASCADE
     )
-    name = models.CharField(max_length=100, default='')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    diagnosis = models.TextField(max_length=500, default='')
-    check_type = models.CharField(max_length=50, default='')
-    clinic = models.CharField(max_length=100, default='')
+    diagnosis = models.TextField(max_length=500, default='', null=True)
+    check_type = models.CharField(max_length=100, default='', null=True)
+    clinic = models.CharField(max_length=200, default='', null=True)
 
     def __str__(self):
         return f"{self.patient}'s examination"
@@ -22,7 +21,7 @@ class Examination(models.Model):
     class Meta:
         verbose_name = 'Исследование'
         verbose_name_plural = 'Исследования'
-        db_table = 'examination_v2'
+        db_table = 'examination'
 
 class SubExam(models.Model):
     '''Промежуточное исследование'''
@@ -30,8 +29,8 @@ class SubExam(models.Model):
         Examination, verbose_name='Исследование', 
         related_name='sub_exams', on_delete=models.CASCADE
     )
-    global_name = models.CharField(max_length=100, default='')
-    check_type = models.CharField(max_length=50, default='')
+    check_version = models.CharField(max_length=15, null=True)
+    check_type = models.CharField(max_length=50, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -41,4 +40,4 @@ class SubExam(models.Model):
     class Meta:
         verbose_name = 'Подъисследование'
         verbose_name_plural = 'Подъисследование'
-        db_table = 'port_v2'
+        db_table = 'port'
