@@ -12,7 +12,7 @@ class Creator:
     '''Create all of the required data'''
 
     def create_patient(self, rows):
-        print('createing patients')
+        print('creating patients')
         if len(rows) != Patient.objects.all().count():
             for user in rows:
                 try:
@@ -31,8 +31,8 @@ class Creator:
                     pass
     
     def create_port(self, rows):
-        print('createing subexams')
-        if len(rows) != SubExam.objects.all().count()
+        print('creating subexams')
+        if len(rows) != SubExam.objects.all().count():
             for subexam in rows:
                 try:
                     SubExam.objects.create(
@@ -47,9 +47,9 @@ class Creator:
                     print(f'SubExam with id={subexam[0]} already exists!')
     
     def create_sequence(self, rows):
-        print('createing sequences')
+        print('creating sequences')
         begin_id = 128356
-        if len(rows) != Sequence.objects.all().count()
+        if len(rows) != Sequence.objects.all().count():
             for seq in rows:
                 try:
                     Sequence.objects.create(
@@ -64,8 +64,8 @@ class Creator:
                     print(f'Sequence with id={seq[0]} already exists!')
 
     def create_examination(self, rows):
-        print('createing exams')
-        if len(rows) != Examination.objects.all().count()
+        print('creating exams')
+        if len(rows) != Examination.objects.all().count():
             for exam in rows:
                 try:
                     Examination.objects.create(
@@ -93,7 +93,7 @@ class Executor:
         self.conn.close()
 
     def get_data(self, db_table):
-        self.cursor.execute(f'SELECT * FROM {db_table} WHERE id>=128357;')
+        self.cursor.execute(f'SELECT * FROM {db_table};')
         # print(f'getting data from {db_table}')
         return self.cursor.fetchall()
 

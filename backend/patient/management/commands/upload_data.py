@@ -24,5 +24,5 @@ class Command(BaseCommand):
         )
         executor = Executor(conn)
         models = ['patient', 'examination', 'port', 'sequence']
-        list(map(executor.manage_data, ['sequence']))
+        list(map(executor.manage_data, models))
         executor.close()

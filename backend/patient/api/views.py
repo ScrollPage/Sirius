@@ -2,7 +2,7 @@ from rest_framework.decorators import action
 from rest_framework import permissions
 
 from patient.models import Patient
-from .service import PFListCreateViewSet
+from .service import PFListCreateViewSet, PatientPagination
 from .serializers import PatientSerializer
 
 from backend.core import FastResponseMixin
@@ -19,6 +19,7 @@ class PatientViewSet(PFListCreateViewSet):
     permission_classes_by_action = {
 
     }
+    pagination_class = PatientPagination
 
     def get_queryset(self):
         return Patient.objects.all()
