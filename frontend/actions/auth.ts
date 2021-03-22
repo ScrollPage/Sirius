@@ -1,3 +1,4 @@
+import { IUser } from './../types/user';
 import Cookie from 'js-cookie';
 import Router from 'next/router';
 import { instance } from '@/api';
@@ -28,9 +29,9 @@ const authInfo = async () => {
   await instance()
     .get('/auth/users/me/')
     .then(res => {
-      const { id, username, email } = res.data;
+      const { id, username, email } = res.data as IUser;
 
-      Cookie.set('userId', id);
+      Cookie.set('userId', String(id));
       Cookie.set('userName', username);
       Cookie.set('email', email);
       console.log('Информация успешно занесена в куки');
