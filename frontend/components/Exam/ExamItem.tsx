@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Tr, Td, Button } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 import { SubList } from "../Sub/SubList";
+import { toDate } from "@/utils/toDate";
 
 interface Props {
   exam: IExam;
@@ -24,8 +25,8 @@ export const ExamItem: React.FC<Props> = ({ exam }) => {
         </Td>
         <Td>{exam.diagnosis ?? "Отсутствует"}</Td>
         <Td>{exam.clinic}</Td>
-        <Td>{exam.created}</Td>
-        <Td>{exam.updated}</Td>
+        <Td>{toDate(exam.created)}</Td>
+        <Td>{toDate(exam.updated)}</Td>
       </Tr>
       {isOpen && <SubList examId={exam.id} />}
     </>

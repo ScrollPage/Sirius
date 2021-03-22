@@ -38,11 +38,11 @@ const AuthButtons = () => {
   }
 
   return (
-    <Flex alignItems="center">
+    <>
       <Text mr="20px">{userName}</Text>
       <Button w="100px" colorScheme="purple" onClick={logout}>
         Выйти
       </Button>
-    </Flex>
+    </>
   );
 };

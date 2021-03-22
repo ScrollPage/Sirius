@@ -1,6 +1,7 @@
 import { IPatient } from "@/types/patient";
 import React from "react";
 import { Tr, Td, Link } from "@chakra-ui/react";
+import { toDate } from "@/utils/toDate";
 
 interface Props {
   patient: IPatient;
@@ -19,8 +20,8 @@ export const PatientItem: React.FC<Props> = ({ patient }) => {
         </Td>
         <Td>{patient.birth_date}</Td>
         <Td>{patient.sex ? "М" : "Ж"}</Td>
-        <Td>{patient.created}</Td>
-        <Td>{patient.updated}</Td>
+        <Td>{toDate(patient.created)}</Td>
+        <Td>{toDate(patient.updated)}</Td>
       </Tr>
     </>
   );

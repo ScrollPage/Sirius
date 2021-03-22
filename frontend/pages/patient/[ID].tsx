@@ -17,7 +17,7 @@ interface Props {
 
 export default function Patient({ exams, patient }: Props) {
   return (
-    <Layout title="Диагнозы пациента">
+    <Layout title="Исследования пациента">
       <Head>
         <title>Пациент</title>
       </Head>

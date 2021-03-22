@@ -13,12 +13,13 @@ export const SubList: React.FC<Props> = ({ examId }) => {
 
   return (
     <>
-      <Td></Td>
+      <Td />
       {/* @ts-ignore */}
       <Td colSpan="4">
-        <Table variant="striped" colorScheme="red">
+        <Table variant="striped" colorScheme="green">
           <Thead>
             <Tr>
+              <Th>Диаграмма</Th>
               <Th>Тип</Th>
               <Th>Версия</Th>
               <Th>Создано</Th>

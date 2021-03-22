@@ -1,4 +1,5 @@
 import { IPatient } from "@/types/patient";
+import { toDate } from "@/utils/toDate";
 import { Flex, Box, Text, Container, Heading } from "@chakra-ui/layout";
 import React from "react";
 
@@ -34,13 +35,13 @@ export const PatientCard: React.FC<Props> = ({ patient }) => {
           <Heading as="h6" size="sm">
             Создано:
           </Heading>
-          <Text fontSize="md">{patient.created}</Text>
+          <Text fontSize="md">{toDate(patient.created)}</Text>
         </Flex>
         <Flex justifyContent="space-between">
           <Heading as="h6" size="sm">
             Изменено:
           </Heading>
-          <Text fontSize="md">{patient.updated}</Text>
+          <Text fontSize="md">{toDate(patient.updated)}</Text>
         </Flex>
       </Container>
     </Box>
