@@ -73,7 +73,6 @@ class Creator:
                         patient=get_object_or_404(Patient, id=exam[1]),
                         created=exam[2],
                         updated=exam[3],
-                        check_type=exam[4],
                         diagnosis=exam[5],
                         clinic=exam[6],
                     )

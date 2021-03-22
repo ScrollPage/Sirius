@@ -1,6 +1,8 @@
 from rest_framework.decorators import action
 from rest_framework import permissions
 
+from url_filter.integrations.drf import DjangoFilterBackend
+
 from patient.models import Patient
 from .service import PFListCreateViewSet, PatientPagination
 from .serializers import PatientSerializer
@@ -20,6 +22,9 @@ class PatientViewSet(PFListCreateViewSet):
 
     }
     pagination_class = PatientPagination
+
+    filter_backends = [DjangoFilterBackend]
+    filter_fields = '__all__'
 
     def get_queryset(self):
         return Patient.objects.all()

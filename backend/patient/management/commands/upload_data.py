@@ -3,7 +3,7 @@ from django.conf import settings
 
 import psycopg2
 
-from patient.management.service import Executor 
+from patient.management.service import Executor
 
 class Command(BaseCommand):
     '''Uploads all data from postgreSQL DB'''

@@ -12,7 +12,6 @@ class Examination(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     diagnosis = models.TextField(max_length=500, default='', null=True)
-    check_type = models.CharField(max_length=100, default='', null=True)
     clinic = models.CharField(max_length=200, default='', null=True)
 
     def __str__(self):

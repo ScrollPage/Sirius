@@ -46,7 +46,7 @@ class Point(models.Model):
         db_table = 'point'
 
 class Value(models.Model):
-    '''Значение в послежовательности измерений'''
+    '''Значение в последовательности измерений'''
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=50)

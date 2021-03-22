@@ -1,5 +1,5 @@
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import CreateModelMixin, ListModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -8,7 +8,8 @@ from backend.core import FastResponseMixin, PermissionMixin, SerializerMixin
 class PFListCreateViewSet(
     FastResponseMixin, PermissionMixin,
     SerializerMixin,CreateModelMixin,
-    ListModelMixin, GenericViewSet
+    ListModelMixin, RetrieveModelMixin, 
+    GenericViewSet
     
 ):
     '''
