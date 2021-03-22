@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Box, Flex, Heading } from "@chakra-ui/layout";
 import { ThemeSwitch } from "@/components/ThemeSwitch";
 import React from "react";
 import { useUser } from "@/hooks/useUser";
@@ -39,7 +39,9 @@ const AuthButtons = () => {
 
   return (
     <>
-      <Text mr="20px">{userName}</Text>
+      <Heading size="md" mr="20px">
+        {userName}
+      </Heading>
       <Button w="100px" colorScheme="purple" onClick={logout}>
         Выйти
       </Button>

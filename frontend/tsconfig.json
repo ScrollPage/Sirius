@@ -37,5 +37,5 @@
 		"next-env.d.ts",
 		"next.config.js",
 		"utils"
-	]
+, "components/Sub/Chart.tsx"	]
 }
