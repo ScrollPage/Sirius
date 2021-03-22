@@ -11,8 +11,8 @@ export const Layout: React.FC<Props> = ({ children, title }) => {
   return (
     <Flex flexDirection="column">
       <Header />
-      <Container maxW="container.md" pt="40px">
-        <Flex justifyContent="center">
+      <Container maxW="container.xl" pt="40px">
+        <Flex justifyContent="center" mb="40px">
           <Heading as="h1">{title}</Heading>
         </Flex>
         {children}
