@@ -7,7 +7,7 @@ class SequenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sequence
-        fields = ['name']
+        fields = '__all__'
         read_only_fields = ['created', 'updated']
         extra_kwargs = {
             'sub_exam': {'write_only': True}

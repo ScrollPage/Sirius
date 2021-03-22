@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 from exam.models import SubExam
 
@@ -10,10 +11,8 @@ class Sequence(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    inner_uid = models.PositiveIntegerField(default=0)
-    name = models.CharField(max_length=50)
     length = models.PositiveIntegerField(default=0)
-
+    values = ArrayField(models.DecimalField(max_digits=10, decimal_places=9))
 
     def __str__(self):
         return f'sequence of sub exam {self.sub_exam}'
@@ -27,7 +26,7 @@ class Point(models.Model):
     '''Точка в последовательности измерений'''
     sequence = models.ForeignKey(
         Sequence, verbose_name='Последовательность', 
-        related_name='values', on_delete=models.CASCADE
+        related_name='points', on_delete=models.CASCADE
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

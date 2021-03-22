@@ -5,9 +5,7 @@ from django.shortcuts import get_object_or_404
 from .service import SFRetrieveUpdateDestroyCreateViewSet
 from .serializers import ExamSerializer, SubExamSerializer
 from metric.api.serializers import SequenceSerializer
-from exam.models import Examination
-
-from django.views.decorators.cache import cache_page
+from exam.models import Examination, SubExam
 
 class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     '''
@@ -22,9 +20,6 @@ class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
 
     def get_queryset(self):
         return Examination.objects.all()
-
-    def perform_create(self, serializer):
-        serializer.save(patient=self.request.user)
 
     @action(detail=True, methods=['get'])
     def sub(self, request, *args, **kwargs):
