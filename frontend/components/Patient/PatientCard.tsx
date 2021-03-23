@@ -16,9 +16,7 @@ export const PatientCard: React.FC<Props> = ({ patient }) => {
             <Heading as="h6" size="sm">
               Имя:
             </Heading>
-            <Text fontSize="md">
-              {patient.first_name} {patient.last_name}
-            </Text>
+            <Text fontSize="md">{patient.name}</Text>
           </Flex>
           <Flex justifyContent="space-between">
             <Heading as="h6" size="sm">

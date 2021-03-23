@@ -1,10 +1,16 @@
+import deepEqual from "fast-deep-equal";
 import { instanceWithSSR } from "@/api";
 import { Layout } from "@/components/Layout/layout";
 import { Paginator } from "@/components/Patient/Paginator";
 import { PatientList } from "@/components/Patient/PatientList";
-import { IPatient, PatientPagination } from "@/types/patient";
+import { SearchForm } from "@/components/UI/Search";
+import { PatientPagination } from "@/types/patient";
 import { ensureAuth } from "@/utils/ensure";
 import { getAsString } from "@/utils/getAsString";
+import { yearsToDate } from "@/utils/yearsToDate";
+import { SpinnerIcon } from "@chakra-ui/icons";
+import { Flex, Text } from "@chakra-ui/layout";
+import { Spinner } from "@chakra-ui/spinner";
 import { AxiosError, AxiosResponse } from "axios";
 import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
@@ -18,7 +24,11 @@ interface Props {
 
 export default function Main({ patientPagination }: Props) {
   const { query, push } = useRouter();
-  const currentPage = Number(getAsString(query.page) || 1);
+  const [serverQuery] = useState(query);
+  const currentPage = Number(getAsString(query.page || "1"));
+  const name = getAsString(query.name) || "";
+  const lower = yearsToDate(Number(getAsString(query.lower) || "0"));
+  const greater = yearsToDate(Number(getAsString(query.greater) || "200"));
 
   const setCurrentPage = (nextPage: number) => {
     push(
@@ -36,26 +46,38 @@ export default function Main({ patientPagination }: Props) {
   };
 
   const { data: patientsData, error } = useSWR(
-    `/api/patient/?page=${currentPage}`,
+    patientUrl(currentPage, name, lower, greater),
     {
-      initialData: patientPagination,
+      initialData: deepEqual(query, serverQuery)
+        ? patientPagination
+        : undefined,
     }
   );
 
-  const pagesQuantity = patientPagination?.page_num ?? 0;
+  const pagesQuantity = patientsData?.page_num ?? 0;
 
   return (
     <Layout title="Пациенты">
       <Head>
         <title>Пациенты</title>
       </Head>
+      <SearchForm />
       <Paginator
         pagesQuantity={pagesQuantity}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
-      {(!patientsData || error) && "Ошибка сервера"}
-      {patientsData && <PatientList patients={patientsData.data} />}
+      {error ? (
+        <Text>Ошибка загрузки пациентов</Text>
+      ) : !patientsData ? (
+        <Flex justifyContent="center" h="400px" align="center">
+          <Spinner size="xl" />
+        </Flex>
+      ) : patientsData.data.length === 0 ? (
+        <Text>Нет пациентов по вашему запросу</Text>
+      ) : (
+        <PatientList patients={patientsData.data} />
+      )}
       <Paginator
         pagesQuantity={pagesQuantity}
         currentPage={currentPage}
@@ -68,11 +90,14 @@ export default function Main({ patientPagination }: Props) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   ensureAuth(ctx, "private");
 
-  const currentPage = getAsString(ctx.query.page) || 1;
+  const currentPage = Number(getAsString(ctx.query.page || "1"));
+  const name = getAsString(ctx.query.name) || "";
+  const lower = yearsToDate(Number(getAsString(ctx.query.lower) || "0"));
+  const greater = yearsToDate(Number(getAsString(ctx.query.greater) || "200"));
 
   let patientPagination: PatientPagination | null = null;
   await instanceWithSSR(ctx)
-    .get(`/api/patient/?page=${currentPage}`)
+    .get(patientUrl(currentPage, name, lower, greater))
     .then((response: AxiosResponse) => {
       patientPagination = response?.data ?? null;
     })
@@ -86,3 +111,13 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     },
   };
 };
+
+const patientUrl = (
+  currentPage: number,
+  name: string,
+  lower: string,
+  greater: string
+) =>
+  `/api/patient/?page=${currentPage}${
+    name ? `&name__contains=${name}` : ""
+  }&birth_date__lte=${lower}&birth_date__gte=${greater}`;

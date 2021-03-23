@@ -1,5 +1,4 @@
 import { ISequence } from "@/types/sequence";
-import { SpinnerIcon } from "@chakra-ui/icons";
 import {
   Modal,
   ModalOverlay,
@@ -8,6 +7,8 @@ import {
   ModalBody,
   ModalCloseButton,
   Text,
+  Spinner,
+  Flex,
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import dynamic from "next/dynamic";
@@ -39,7 +40,9 @@ export const SubModal: React.FC<Props> = ({ subId, isOpen, onClose }) => {
           {error ? (
             <Text>Ошибка загрузки подисследований</Text>
           ) : !sequences ? (
-            <SpinnerIcon />
+            <Flex justifyContent="center" h="300px" align="center">
+              <Spinner size="xl" />
+            </Flex>
           ) : sequences.length === 0 ? (
             <Text>Нет точек</Text>
           ) : (

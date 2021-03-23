@@ -1,4 +1,5 @@
 import { ISequence } from "@/types/sequence";
+import { useColorMode } from "@chakra-ui/color-mode";
 import React from "react";
 import Chartt from "react-apexcharts";
 
@@ -9,6 +10,9 @@ interface Props {
 }
 
 const Chart: React.FC<Props> = ({ sequences }) => {
+  const { colorMode } = useColorMode();
+  const isDark = colorMode === "dark";
+  const color = isDark ? "#fff" : "#000";
   const categories = [...Array(sequences[0].length).keys()].map(
     (key) => (++key / FREQUENCY) * 1000
   );
@@ -18,6 +22,9 @@ const Chart: React.FC<Props> = ({ sequences }) => {
   };
 
   const options = {
+    theme: {
+      mode: colorMode,
+    },
     chart: {
       type: "line",
       stacked: false,
@@ -40,12 +47,18 @@ const Chart: React.FC<Props> = ({ sequences }) => {
     yaxis: {
       title: {
         text: "Милливольты",
+        style: {
+          color,
+        },
       },
     },
     xaxis: {
       title: {
         text: "Миллисекунды",
         align: "right",
+        style: {
+          color,
+        },
       },
       categories,
       type: "numeric",
@@ -56,29 +69,6 @@ const Chart: React.FC<Props> = ({ sequences }) => {
     stroke: {
       width: 2,
     },
-    // annotations: {
-    //   points: [
-    //     {
-    //       x: 43,
-    //       y: 3,
-    //       marker: {
-    //         size: 3,
-    //         fillColor: "#fff",
-    //         strokeColor: "#FF4560",
-    //         strokeWidth: 3,
-    //         shape: "circle",
-    //         radius: 2,
-    //         OffsetX: 0,
-    //         OffsetY: 0,
-    //         cssClass: "",
-    //       },
-    //       label: {
-    //         borderColor: "#FF4560",
-    //         text: "Выбранное значение",
-    //       },
-    //     },
-    //   ],
-    // },
   };
 
   const series = sequences.map((sequence) => ({
