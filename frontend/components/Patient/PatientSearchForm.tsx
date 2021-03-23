@@ -19,7 +19,7 @@ const validationSchema = object().shape({
   greater: number().min(0, "> 0").max(200, " < 200"),
 });
 
-export const SearchForm = () => {
+export const PatientSearchForm = () => {
   const { query, push } = useRouter();
 
   const name = getAsString(query.name) || "";
