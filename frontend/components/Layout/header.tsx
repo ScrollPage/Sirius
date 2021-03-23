@@ -1,4 +1,4 @@
-import { Box, Flex, Heading } from "@chakra-ui/layout";
+import { Box, Flex, Heading, Link } from "@chakra-ui/layout";
 import { ThemeSwitch } from "@/components/ThemeSwitch";
 import React from "react";
 import { useUser } from "@/hooks/useUser";
@@ -19,7 +19,11 @@ export const Header = () => {
       bg={bg}
       color={cl}
     >
-      <Heading as="h1">GG</Heading>
+      <Heading as="h1">
+        <Link href="/">
+          <a>Главная</a>
+        </Link>
+      </Heading>
       <Flex alignItems="center">
         <AuthButtons />
         <Box ml="10px">
@@ -40,7 +44,7 @@ const AuthButtons = () => {
   return (
     <>
       <Heading size="md" mr="20px">
-        {userName}
+        Вы: {userName}
       </Heading>
       <Button w="100px" colorScheme="purple" onClick={logout}>
         Выйти

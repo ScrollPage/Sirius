@@ -12,7 +12,7 @@ export const ExamList: React.FC<Props> = ({ exams }) => {
     <Table variant="striped" colorScheme="purple">
       <Thead>
         <Tr>
-          <Th>Открыть</Th>
+          <Th>Действия</Th>
           <Th>Диагноз</Th>
           <Th>Клиника</Th>
           <Th>Создано</Th>
@@ -26,7 +26,7 @@ export const ExamList: React.FC<Props> = ({ exams }) => {
       </Tbody>
       <Tfoot>
         <Tr>
-          <Th>Открыть</Th>
+          <Th>Действия</Th>
           <Th>Диагноз</Th>
           <Th>Клиника</Th>
           <Th>Создано</Th>

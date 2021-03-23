@@ -4,9 +4,10 @@ import {
   FormLabel,
   Input,
   Text,
+  Textarea,
 } from "@chakra-ui/react";
 import { useField } from "formik";
-import React from "react";
+import React, { useMemo } from "react";
 
 interface MyFieldProps {
   name: string;
@@ -15,6 +16,7 @@ interface MyFieldProps {
   placeholder: string;
   size: string;
   w?: string;
+  isTextArea?: boolean;
 }
 
 export const MyField: React.FC<MyFieldProps> = ({
@@ -24,16 +26,19 @@ export const MyField: React.FC<MyFieldProps> = ({
   placeholder,
   size,
   w,
+  isTextArea,
 }) => {
   const [field, meta] = useField(name);
   const isShowError = meta.touched && !!meta.error;
+
+  const Target = useMemo(() => (isTextArea ? Textarea : Input), [isTextArea]);
 
   return (
     <FormControl mt="4" isInvalid={isShowError}>
       <FormLabel w={w}>
         <Text fontSize="sm">{label}</Text>
       </FormLabel>
-      <Input
+      <Target
         {...field}
         size={size}
         w={w}

@@ -14,8 +14,9 @@ import {
 import useSWR from "swr";
 // import { Chart } from "./Chart";
 import dynamic from "next/dynamic";
+import { ChartForm } from "../Chart/ChartForm";
 
-const DynamicComponentWithNoSSR = dynamic(() => import("./Chart"), {
+const DynamicComponentWithNoSSR = dynamic(() => import("../Chart/Chart"), {
   ssr: false,
 });
 
@@ -31,7 +32,7 @@ export const SubModal: React.FC<Props> = ({ subId, isOpen, onClose }) => {
   );
 
   return (
-    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+    <Modal size="4xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Диаграмма</ModalHeader>
@@ -47,13 +48,13 @@ export const SubModal: React.FC<Props> = ({ subId, isOpen, onClose }) => {
           ) : (
             <DynamicComponentWithNoSSR sequences={sequences} />
           )}
+          <ChartForm />
         </ModalBody>
 
         <ModalFooter>
           <Button colorScheme="blue" mr={3} onClick={onClose}>
             Закрыть
           </Button>
-          <Button variant="ghost">Что-то</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

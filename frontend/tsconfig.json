@@ -36,6 +36,7 @@
 		"gatsby-browser.js",
 		"next-env.d.ts",
 		"next.config.js",
-		"utils"
-, "components/Sub/Chart.tsx"	]
+		"utils",
+		"components/Chart/Chart.tsx"
+	]
 }
