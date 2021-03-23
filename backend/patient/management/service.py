@@ -92,7 +92,7 @@ class Executor:
         self.conn.close()
 
     def get_data(self, db_table):
-        self.cursor.execute(f'SELECT * FROM {db_table};')
+        self.cursor.execute(f"SELECT * FROM {db_table};")
         # print(f'getting data from {db_table}')
         return self.cursor.fetchall()
 
