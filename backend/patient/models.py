@@ -10,13 +10,10 @@ from django.contrib.auth.models import (
 
 from random import randint
 
-from .service import send_activation_email
-
 class Patient(models.Model):
     '''Кастомная модель пользователя'''
     birth_date = models.DateField('Дата рождения', null=True)
-    first_name = models.CharField('Имя', max_length=30, null=True)
-    last_name = models.CharField('Фамилия', max_length=30, null=True)
+    name = models.CharField('Полное имя', max_length=100, null=True)
     created = models.DateTimeField('Создан', auto_now_add=True)
     updated = models.DateTimeField('Обновлен', auto_now=True)
     sex = models.BooleanField('Пол', default=True)

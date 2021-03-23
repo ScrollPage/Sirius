@@ -6,9 +6,9 @@ from rest_framework.response import Response
 from patient.models import Patient
 from backend.core import FastResponseMixin, PermissionMixin, SerializerMixin
 
-class PFListCreateViewSet(
+class PFListCreateRetrieveViewSet(
     FastResponseMixin, PermissionMixin,
-    SerializerMixin,CreateModelMixin,
+    SerializerMixin, CreateModelMixin,
     ListModelMixin, RetrieveModelMixin, 
     GenericViewSet
     

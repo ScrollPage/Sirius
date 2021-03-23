@@ -13,6 +13,8 @@ class Sequence(models.Model):
     updated = models.DateTimeField(auto_now=True)
     length = models.PositiveIntegerField(default=0)
     values = ArrayField(models.DecimalField(max_digits=10, decimal_places=9))
+    eye = models.CharField('Глаз', max_length=1, null=True)
+    name = models.CharField('Название', max_length=100, null=True)
 
     def __str__(self):
         return f'sequence of sub exam {self.sub_exam}'

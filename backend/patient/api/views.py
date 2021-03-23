@@ -4,15 +4,16 @@ from rest_framework import permissions
 from url_filter.integrations.drf import DjangoFilterBackend
 
 from patient.models import Patient
-from .service import PFListCreateViewSet, PatientPagination
+from .service import PFListCreateRetrieveViewSet, PatientPagination
 from .serializers import PatientSerializer
 
 from backend.core import FastResponseMixin
 from exam.api.serializers import ExamSerializer
 
 
-class PatientViewSet(PFListCreateViewSet):
+class PatientViewSet(PFListCreateRetrieveViewSet):
     '''Все про пациента'''
+    queryset = Patient.objects.all()
     serializer_class = PatientSerializer
     serializer_class_by_action = {
         'exam': ExamSerializer 
@@ -26,8 +27,6 @@ class PatientViewSet(PFListCreateViewSet):
     filter_backends = [DjangoFilterBackend]
     filter_fields = '__all__'
 
-    def get_queryset(self):
-        return Patient.objects.all()
 
     @action(detail=True, methods=['get'])
     def exam(self, request, *args, **kwargs):

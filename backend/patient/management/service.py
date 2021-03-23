@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 
 import psycopg2
 import time
+from alive_progress import alive_bar
 
 from patient.models import Patient
 from exam.models import Examination, SubExam
@@ -12,27 +13,36 @@ class Creator:
     '''Create all of the required data'''
 
     def create_patient(self, rows):
-        print('creating patients')
-        if len(rows) != Patient.objects.all().count():
+        print('Creating patients...')
+        col = Patient.objects.count()
+        rows = rows[col:]
+        with alive_bar(
+            len(rows), bar='blocks', 
+            spinner='waves'
+        ) as bar:
             for user in rows:
                 try:
                     sex = 0 if user[4] == 'ж' else 1
-                    user = Patient.objects.create(
+                    Patient.objects.create(
                         id=user[0],
-                        first_name=user[1],
-                        last_name=user[2],
+                        name=f'{user[1]} {user[2]}',
                         birth_date=user[3],
                         sex=bool(sex),
                         created=user[6],
                         updated=user[7]
                     )
                 except django.db.utils.IntegrityError:
-                    print(f'Patient with id={user[0]} already exists!')
                     pass
+                bar()
     
     def create_port(self, rows):
-        print('creating subexams')
-        if len(rows) != SubExam.objects.all().count():
+        print('Creating subexams...')
+        col = SubExam.objects.count()
+        rows = rows[col:]
+        with alive_bar(
+            len(rows), bar='blocks', 
+            spinner='waves'
+        ) as bar:
             for subexam in rows:
                 try:
                     SubExam.objects.create(
@@ -44,13 +54,23 @@ class Creator:
                         updated=subexam[6],
                     )
                 except django.db.utils.IntegrityError:
-                    print(f'SubExam with id={subexam[0]} already exists!')
+                    pass
+                bar()
     
     def create_sequence(self, rows):
-        print('creating sequences')
+        print('Creating sequences...')
+        col = Sequence.objects.count()
+        rows = rows[col:]
         begin_id = 128356
-        if len(rows) != Sequence.objects.all().count():
+        with alive_bar(
+            len(rows), bar='blocks', 
+            spinner='waves'
+        ) as bar:
             for seq in rows:
+                try:
+                    eye = seq[4]['eye']
+                except KeyError:
+                    eye = '-'
                 try:
                     Sequence.objects.create(
                         id=seq[0]-begin_id,
@@ -58,14 +78,22 @@ class Creator:
                         created=seq[2],
                         updated=seq[3],
                         sub_exam=get_object_or_404(SubExam, id=seq[5]),
-                        values=seq[8]
+                        name=seq[7],
+                        values=seq[8],
+                        eye=eye
                     )
                 except django.db.utils.IntegrityError:
-                    print(f'Sequence with id={seq[0]} already exists!')
+                    pass
+                bar()
 
     def create_examination(self, rows):
-        print('creating exams')
-        if len(rows) != Examination.objects.all().count():
+        print('Creating exams...')
+        col = Examination.objects.count()
+        rows = rows[col:]
+        with alive_bar(
+            len(rows), bar='blocks', 
+            spinner='waves'
+        ) as bar:
             for exam in rows:
                 try:
                     Examination.objects.create(
@@ -77,7 +105,8 @@ class Creator:
                         clinic=exam[6],
                     )
                 except django.db.utils.IntegrityError:
-                    print(f'Exam with id={exam[0]} already exists!')
+                    pass
+                bar()
 
 class Executor:
     '''Executes SQL commands and grabs all of the data'''
@@ -92,6 +121,7 @@ class Executor:
         self.conn.close()
 
     def get_data(self, db_table):
+        print(f'Executing SQL query for {db_table}...')
         self.cursor.execute(f"SELECT * FROM {db_table};")
         # print(f'getting data from {db_table}')
         return self.cursor.fetchall()

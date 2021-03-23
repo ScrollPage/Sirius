@@ -203,3 +203,14 @@ CORS_ORIGIN_WHITELIST = (
     u'http://127.0.0.1:3000',
     u'http://localhost:3000'
 )
+
+# MEM_HOST = os.environ.get('MEM_HOST', local.MEM_HOST)
+# MEM_PORT = os.environ.get('MEM_PORT', local.MEM_PORT)
+
+# # Memcached
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': f'{MEM_HOST}:{MEM_PORT}',
+#     }
+# }
