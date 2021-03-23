@@ -3,7 +3,10 @@ from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveMode
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
+from url_filter.filtersets import ModelFilterSet
+
 from patient.models import Patient
+from exam.models import Examination
 from backend.core import FastResponseMixin, PermissionMixin, SerializerMixin
 
 class PFListCreateRetrieveViewSet(
@@ -25,10 +28,19 @@ class PatientPagination(PageNumberPagination):
     max_page_size = 1000
 
     def get_paginated_response(self, data):
-        col = int(Patient.objects.all().count()/self.page_size)
+        col = int(self.page.paginator.count/self.page_size)
         return Response(
             {
-                'page_num': col if not Patient.objects.all().count()%self.page_size else col + 1, 
+                'page_num': col if not self.page.paginator.count%self.page_size else col + 1, 
                 'data': data
             }
         )
+
+class ExamFilterSet(ModelFilterSet):
+    class Meta:
+        model = Examination
+
+def parse_query_params_to_string(request):
+    params = request.query_params
+    res = '&'.join(f'{key}={val}' for key, val in params.items())
+    return res

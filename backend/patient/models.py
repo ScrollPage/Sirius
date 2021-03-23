@@ -25,7 +25,3 @@ class Patient(models.Model):
         verbose_name = 'Пациент'
         verbose_name_plural = 'Пациенты'
         db_table = 'patient'
-
-    @property
-    def full_name(self):
-        return f'{self.last_name} {self.first_name}'
