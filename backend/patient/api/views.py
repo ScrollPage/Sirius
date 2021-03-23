@@ -7,7 +7,7 @@ from url_filter.integrations.drf import DjangoFilterBackend
 
 from patient.models import Patient
 from .service import (
-    PFListCreateRetrieveViewSet, PatientPagination, 
+    FSListCreateRetrieveViewSet, PatientPagination, 
     ExamFilterSet, parse_query_params_to_string
 )
 from .serializers import PatientSerializer
@@ -16,7 +16,7 @@ from backend.core import FastResponseMixin
 from exam.api.serializers import ExamSerializer
 
 
-class PatientViewSet(PFListCreateRetrieveViewSet):
+class PatientViewSet(FSListCreateRetrieveViewSet):
     '''Все про пациента'''
     queryset = Patient.objects.all().order_by('id')
     serializer_class = PatientSerializer
@@ -24,9 +24,7 @@ class PatientViewSet(PFListCreateRetrieveViewSet):
         'exam': ExamSerializer 
     }
     permission_classes = [permissions.IsAuthenticated]
-    permission_classes_by_action = {
 
-    }
     pagination_class = PatientPagination
 
     filter_backends = [DjangoFilterBackend]
