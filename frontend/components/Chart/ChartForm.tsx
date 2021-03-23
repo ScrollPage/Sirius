@@ -6,13 +6,11 @@ import { object, number } from "yup";
 
 interface FormValues {
   xaxis: number;
-  yaxis: number;
 }
 
 export const ChartForm = () => {
   const validationSchema = object().shape({
     xaxis: number().required("Поле пустое").integer("Введите целове число"),
-    yaxis: number().required("Поле пустое").integer("Введите целове число"),
   });
 
   return (
@@ -20,13 +18,11 @@ export const ChartForm = () => {
       <Formik
         initialValues={{
           xaxis: 0,
-          yaxis: 0,
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setSubmitting(true);
           // await login(values.userName, values.password);
-          console.log(values);
           setSubmitting(false);
           resetForm();
         }}
@@ -39,13 +35,6 @@ export const ChartForm = () => {
               name="xaxis"
               type="number"
               placeholder={"Введите X"}
-            />
-            <MyField
-              size="lg"
-              label={"Y"}
-              name="yaxis"
-              type="number"
-              placeholder={"Введите Y"}
             />
             <Flex justifyContent="center" w="100%">
               <Button

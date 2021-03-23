@@ -34,7 +34,7 @@ export const MyField: React.FC<MyFieldProps> = ({
   const Target = useMemo(() => (isTextArea ? Textarea : Input), [isTextArea]);
 
   return (
-    <FormControl mt="4" isInvalid={isShowError}>
+    <FormControl mt="4" isInvalid={isShowError} w={w}>
       <FormLabel w={w}>
         <Text fontSize="sm">{label}</Text>
       </FormLabel>

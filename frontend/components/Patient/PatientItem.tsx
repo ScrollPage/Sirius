@@ -13,9 +13,7 @@ export const PatientItem: React.FC<Props> = ({ patient }) => {
       <Tr>
         <Td>
           <Link href={`/patient/${patient.id}`}>
-            <a>
-              {patient.first_name} {patient.last_name}
-            </a>
+            <a>{patient.name}</a>
           </Link>
         </Td>
         <Td>{patient.birth_date}</Td>
