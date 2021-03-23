@@ -19,7 +19,7 @@ class Patient(models.Model):
     sex = models.BooleanField('Пол', default=True)
 
     def __str__(self):
-        return self.full_name
+        return self.name
         
     class Meta:
         verbose_name = 'Пациент'

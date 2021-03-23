@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'cacheops',
     'corsheaders',
     'djoser',
     'drf_yasg',
@@ -214,3 +215,21 @@ CORS_ORIGIN_WHITELIST = (
 #         'LOCATION': f'{MEM_HOST}:{MEM_PORT}',
 #     }
 # }
+
+REDIS_HOST = os.environ.get('REDIS_HOST', local.REDIS_HOST)
+REDIS_PORT = os.environ.get('REDIS_PORT', local.REDIS_PORT)
+
+# Cacheops
+CACHEOPS_REDIS = {
+    'host': REDIS_HOST,
+    'port': REDIS_PORT,
+    'db': 2,
+}
+
+CACHEOPS_DEFAULTS = {
+    'timeout': 60*30
+}
+
+CACHEOPS = {
+    'patient.Patient': {'ops': 'all'}
+}
