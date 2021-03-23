@@ -3,24 +3,25 @@ from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveMode
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
-from cacheops import cached_as
+from cacheops import cached_as, cached
 from url_filter.filtersets import ModelFilterSet
 
 from patient.models import Patient
 from exam.models import Examination
-from backend.core import FastResponseMixin, PermissionMixin, SerializerMixin
+from backend.core import (
+    FastResponseMixin, PermissionMixin, 
+    SerializerMixin
+)
 
-class FSListCreateRetrieveViewSet(
+class FSCListCreateRetrieveViewSet(
     FastResponseMixin, SerializerMixin,
     RetrieveModelMixin, CreateModelMixin,
     ListModelMixin, GenericViewSet, 
-    
 ):
     '''
-    Функция быстрого ответа, переопределение определения прав доступа
+    Функция быстрого ответа, переопределение определения сериализатора
     Создание, список
     '''
-    pass
 
 class PatientPagination(PageNumberPagination):
     '''Пагинация пользователей'''
