@@ -9,6 +9,8 @@ import { getAsString } from "@/utils/getAsString";
 import { AxiosError, AxiosResponse } from "axios";
 import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import useSWR from "swr";
 
 interface Props {
   patient: IPatient | null;
@@ -16,14 +18,21 @@ interface Props {
 }
 
 export default function Patient({ exams, patient }: Props) {
+  const { query } = useRouter();
+  const patientId = getAsString(query.ID);
+
+  const { data: examsData, error } = useSWR(`/api/patient/${patientId}/exam/`, {
+    initialData: exams,
+  });
+
   return (
     <Layout title="Исследования пациента">
       <Head>
         <title>Пациент</title>
       </Head>
       {patient && <PatientCard patient={patient} />}
-      {!exams && "Ошибка сервера"}
-      {exams && <ExamList exams={exams} />}
+      {(!examsData || error) && "Ошибка сервера"}
+      {examsData && <ExamList exams={examsData} />}
     </Layout>
   );
 }

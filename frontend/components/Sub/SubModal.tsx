@@ -5,14 +5,11 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
   Text,
 } from "@chakra-ui/react";
 import useSWR from "swr";
-// import { Chart } from "./Chart";
 import dynamic from "next/dynamic";
 import { ChartForm } from "../Chart/ChartForm";
 
@@ -34,7 +31,7 @@ export const SubModal: React.FC<Props> = ({ subId, isOpen, onClose }) => {
   return (
     <Modal size="4xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent p="20px">
         <ModalHeader>Диаграмма</ModalHeader>
         <ModalCloseButton />
 
@@ -50,12 +47,6 @@ export const SubModal: React.FC<Props> = ({ subId, isOpen, onClose }) => {
           )}
           <ChartForm />
         </ModalBody>
-
-        <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={onClose}>
-            Закрыть
-          </Button>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );
