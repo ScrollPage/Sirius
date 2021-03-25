@@ -59,6 +59,7 @@ class PatientPagination(PageNumberPagination):
             self.display_page_controls = True
 
         self.request = request
+        
         @cached_as(queryset, extra=(request.query_params))
         def _get_result():
             return list(self.page)

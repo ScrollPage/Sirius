@@ -5,6 +5,9 @@ from django.http import QueryDict
 
 from url_filter.integrations.drf import DjangoFilterBackend
 
+# from rest_framework_simplejwt.views
+# from djoser.views 
+
 from patient.models import Patient
 from .service import (
     FSCListCreateRetrieveViewSet, PatientPagination, 
@@ -35,9 +38,11 @@ class PatientViewSet(FSCListCreateRetrieveViewSet):
         '''Исследования пользователя'''
         patient = self.get_object()
         exams = patient.exams.all()
+
         query_params = parse_query_params_to_string(request)
         query = QueryDict(query_params)
         fs = ExamFilterSet(data=query, queryset=exams)
         filtered_exams = fs.filter()
+
         serializer = self.get_serializer(filtered_exams, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
