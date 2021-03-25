@@ -216,8 +216,15 @@ CORS_ORIGIN_WHITELIST = (
 #     }
 # }
 
+# Redis
 REDIS_HOST = os.environ.get('REDIS_HOST', local.REDIS_HOST)
 REDIS_PORT = os.environ.get('REDIS_PORT', local.REDIS_PORT)
+
+# Redis db for user's ip and fingerprints
+DEFAULT_APP_REDIS_DB = os.environ.get(
+    'DEFAULT_APP_REDIS_DB', 
+    local.DEFAULT_APP_REDIS_DB
+)
 
 # Cacheops
 CACHEOPS_REDIS = {

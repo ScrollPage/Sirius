@@ -26,6 +26,7 @@ class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
         '''Подъисследования в исследовании'''
         return self.fast_response('sub_exams')
 
+
 class SubExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     serializer_class = SubExamSerializer
     serializer_class_by_action = {

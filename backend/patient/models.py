@@ -7,6 +7,10 @@ from django.contrib.auth.models import (
     BaseUserManager, 
     PermissionsMixin
 )
+from django.conf import settings
+
+import redis
+from djoser.signals import user_registered
 
 from cacheops import invalidate_obj
 from random import randint
@@ -32,3 +36,13 @@ def invalidate_patient(sender, instance=None, created=False, **kwargs):
     '''Создает необходимые сущности'''
     if not created:
         invalidate_obj(instance)
+
+@receiver(user_registered)
+def save_ip_addr(sender, user, request, **kwargs):
+    '''Добавляет айпи в пользователя в базу редис'''
+    pool = redis.ConnectionPool(
+        host=settings.REDIS_HOST, 
+        port=settings.REDIS_PORT, 
+        db=settings.DEFAULT_APP_REDIS_DB
+    )
+    pass
