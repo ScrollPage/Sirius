@@ -1,5 +1,5 @@
 import deepEqual from "fast-deep-equal";
-import { instanceWithSSR } from "@/api";
+import { instance } from "@/api";
 import { Layout } from "@/components/Layout/layout";
 import { Paginator } from "@/components/Patient/Paginator";
 import { PatientList } from "@/components/Patient/PatientList";
@@ -16,6 +16,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import useSWR from "swr";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 interface Props {
   patientPagination: PatientPagination | null;
@@ -55,11 +56,22 @@ export default function Main({ patientPagination }: Props) {
 
   const pagesQuantity = patientsData?.page_num ?? 0;
 
+  const testFingerprint = async () => {
+    try {
+      const fp = await FingerprintJS.load();
+      const result = await fp.get();
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <Layout title="Пациенты">
       <Head>
         <title>Пациенты</title>
       </Head>
+      <button onClick={testFingerprint}>get fingerprint</button>
       <SearchForm />
       <Paginator
         pagesQuantity={pagesQuantity}
@@ -95,7 +107,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const greater = yearsToDate(Number(getAsString(ctx.query.greater) || "200"));
 
   let patientPagination: PatientPagination | null = null;
-  await instanceWithSSR(ctx)
+  await instance(ctx)
     .get(patientUrl(currentPage, name, lower, greater))
     .then((response: AxiosResponse) => {
       patientPagination = response?.data ?? null;

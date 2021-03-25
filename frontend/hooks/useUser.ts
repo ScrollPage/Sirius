@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const useUser = (): Props => {
-  const isAuth = !!Cookie.get('token')
+  const isAuth = !!Cookie.get('accessToken')
   const userId = Cookie.get('userId') || "";
   const userName = Cookie.get('userName') || "";
   const email = Cookie.get('email') || "";

@@ -8,7 +8,7 @@ export const ensureAuth = (ctx: GetServerSidePropsContext<ParsedUrlQuery>, route
   if (route === 'public') {
     return;
   }
-  const token = parseCookies(ctx.req).token;
+  const token = parseCookies(ctx.req).accessToken;
   if (route === 'private') {
     if (!token) {
       ctx.res.writeHead(302, { Location: '/?redirected=true' });

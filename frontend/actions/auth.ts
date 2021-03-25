@@ -3,6 +3,12 @@ import Cookie from 'js-cookie';
 import Router from 'next/router';
 import { instance } from '@/api';
 
+const initExpirationDate = () => {
+  const expirationDate = new Date(new Date().getTime() + 24 * 3600 * 1000);
+  Cookie.set('expirationDate', expirationDate);
+  checkAuthTimeout(24 * 3600 * 1000)
+}
+
 export const login = async (userName: string, password: string) => {
   await instance()
     .post('/auth/jwt/create/', {
@@ -10,13 +16,10 @@ export const login = async (userName: string, password: string) => {
       password,
     })
     .then(res => {
-      const expirationDate = new Date(new Date().getTime() + 24 * 3600 * 1000);
-
-      Cookie.set('token', res.data.access);
-      Cookie.set('expirationDate', expirationDate);
+      initExpirationDate()
+      Cookie.set('accessToken', res.data.access);
+      Cookie.set('refreshToken', res.data.refresh);
       authInfo()
-
-      checkAuthTimeout(24 * 3600 * 1000)
       Router.push({ pathname: '/main' }, undefined, { shallow: true });
       console.log('Вы успешно вошли!');
     })
@@ -30,7 +33,6 @@ const authInfo = async () => {
     .get('/auth/users/me/')
     .then(res => {
       const { id, username, email } = res.data as IUser;
-
       Cookie.set('userId', String(id));
       Cookie.set('userName', username);
       Cookie.set('email', email);
@@ -43,27 +45,41 @@ const authInfo = async () => {
 
 export const logout = () => {
   Router.push({ pathname: '/' }, undefined, { shallow: true });
-  Cookie.remove('token');
+  Cookie.remove('accessToken');
+  Cookie.remove('refreshToken');
   Cookie.remove('expirationDate');
   Cookie.remove('userId');
   Cookie.remove('userName');
   Cookie.remove('email');
 };
 
+const getNewAccessToken = async () => {
+  const refreshToken = Cookie.get('refreshToken');
+  await instance()
+    .post('/auth/jwt/refresh/', {
+      refresh: refreshToken
+    })
+    .then((res) => {
+      Cookie.set('accessToken', res.data.access);
+      initExpirationDate()
+    })
+    .catch(() => logout())
+}
+
 export const checkAuthTimeout = (expirationTime: number) =>
-  setTimeout(() => logout(), expirationTime);
+  setTimeout(() => getNewAccessToken(), expirationTime);
 
 export const authCheckState = () => {
-  const token = Cookie.get('token');
+  const accessToken = Cookie.get('accessToken');
 
-  if (token === undefined) {
+  if (accessToken === undefined) {
     logout();
   } else {
     const date: any = Cookie.get('expirationDate');
     const expirationDate = new Date(date);
 
     if (expirationDate <= new Date()) {
-      logout();
+      getNewAccessToken();
     } else {
       checkAuthTimeout(expirationDate.getTime() - new Date().getTime());
     }

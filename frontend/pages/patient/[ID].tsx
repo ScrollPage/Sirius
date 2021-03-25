@@ -1,5 +1,5 @@
 import deepEqual from "fast-deep-equal";
-import { instanceWithSSR } from "@/api";
+import { instance } from "@/api";
 import { ExamList } from "@/components/Exam/ExamList";
 import { ExamSearchForm } from "@/components/Exam/ExamSearchForm";
 import { Layout } from "@/components/Layout/layout";
@@ -67,7 +67,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const type = getAsString(ctx.query.type) || "";
 
   let exams: IExam[] | null = null;
-  await instanceWithSSR(ctx)
+  await instance(ctx)
     .get(examUrl(patientId, diagnosis, type))
     .then((response: AxiosResponse) => {
       exams = response?.data ?? null;
@@ -77,7 +77,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     });
 
   let patient: IPatient | null = null;
-  await instanceWithSSR(ctx)
+  await instance(ctx)
     .get(`/api/patient/${patientId}/`)
     .then((response: AxiosResponse) => {
       patient = response?.data ?? null;
