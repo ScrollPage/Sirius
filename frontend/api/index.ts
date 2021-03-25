@@ -5,15 +5,15 @@ import Cookie from 'js-cookie';
 import { parseCookies } from '@/utils/parseCookies';
 
 export const instance = (ctx?: GetServerSidePropsContext<ParsedUrlQuery>) => {
-  let token
+  let accessToken
   if (ctx) {
-    token = parseCookies(ctx.req).accessToken
+    accessToken = parseCookies(ctx.req).accessToken
   } else {
-    token = Cookie.get('accessToken') ?? "";
+    accessToken = Cookie.get('accessToken') ?? "";
   }
-  const headers = token ? {
+  const headers = accessToken ? {
     'Content-Type': 'application/json',
-    Authorization: `Token ${token}`
+    Authorization: `Token ${accessToken}`
   } : {};
   return axios.create({
     baseURL: process.env.DB_HOST,

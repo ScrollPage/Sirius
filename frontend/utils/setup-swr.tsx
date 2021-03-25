@@ -18,7 +18,7 @@ export const SWRProvider: React.ComponentType<{
             baseURL: process.env.DB_HOST,
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Token ${Cookie.get("token")}`,
+              Authorization: `Token ${Cookie.get("accessToken")}`,
             },
           }).then((r) => r.data),
       }}
