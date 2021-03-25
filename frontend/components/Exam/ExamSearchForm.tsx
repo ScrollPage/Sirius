@@ -14,6 +14,7 @@ import { getAsString } from "@/utils/getAsString";
 import { useRouter } from "next/router";
 import { SearchIcon } from "@chakra-ui/icons";
 import { ParsedUrlQueryInput } from "node:querystring";
+import { createClearObject } from "@/utils/queryCode";
 
 const types = ["VEP", "ERG", "MERG", "EOG", "SweepVEP", "MVEP"];
 
@@ -36,21 +37,12 @@ export const ExamSearchForm = () => {
           diagnosis: diagnosis,
           type: type,
         }}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
-          let query: ParsedUrlQueryInput = {
-            ...values,
-          };
-          if (!values.diagnosis) {
-            delete query.diagnosis;
-          }
-          if (!values.type) {
-            delete query.type;
-          }
           push(
             {
               pathname: `/patient/${patientId}`,
-              query,
+              query: createClearObject(values),
             },
             undefined,
             { shallow: true }

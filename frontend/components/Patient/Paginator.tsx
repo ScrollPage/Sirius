@@ -40,14 +40,16 @@ interface Props {
   currentPage: number;
   setCurrentPage: (nextPage: number) => void;
   pagesQuantity: number;
+  children: React.ReactNode;
 }
 
 export const Paginator: React.FC<Props> = ({
   setCurrentPage,
   currentPage,
   pagesQuantity,
+  children,
 }) => {
-  return (
+  const target = (
     <ChakraPaginator
       activeStyles={activeStyles}
       innerLimit={innerLimit}
@@ -64,5 +66,12 @@ export const Paginator: React.FC<Props> = ({
         <Next>Далее</Next>
       </Container>
     </ChakraPaginator>
+  );
+  return (
+    <>
+      {target}
+      {children}
+      {target}
+    </>
   );
 };
