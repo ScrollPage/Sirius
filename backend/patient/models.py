@@ -8,6 +8,7 @@ from django.contrib.auth.models import (
     PermissionsMixin
 )
 
+from cacheops import invalidate_obj
 from random import randint
 
 class Patient(models.Model):
@@ -25,3 +26,9 @@ class Patient(models.Model):
         verbose_name = 'Пациент'
         verbose_name_plural = 'Пациенты'
         db_table = 'patient'
+
+@receiver(post_save, sender=Patient)
+def invalidate_patient(sender, instance=None, created=False, **kwargs):
+    '''Создает необходимые сущности'''
+    if not created:
+        invalidate_obj(instance)

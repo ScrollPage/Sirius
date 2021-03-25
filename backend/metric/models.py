@@ -46,20 +46,3 @@ class Point(models.Model):
         verbose_name = 'Точка'
         verbose_name_plural = 'Точки'
         db_table = 'point'
-
-class Value(models.Model):
-    '''Значение в последовательности измерений'''
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    name = models.CharField(max_length=50)
-    value = models.DecimalField('Значение', max_digits=12, decimal_places=6)
-    unit = models.CharField(max_length=20)
-    normal = models.CharField(max_length=50)
-
-    def __str__(self):
-        return f'value in {self.sequence}'
-
-    class Meta:
-        verbose_name = 'Значение'
-        verbose_name_plural = 'Значения'
-        db_table = 'value'

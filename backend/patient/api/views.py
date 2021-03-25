@@ -7,7 +7,7 @@ from url_filter.integrations.drf import DjangoFilterBackend
 
 from patient.models import Patient
 from .service import (
-    FSListCreateRetrieveViewSet, PatientPagination, 
+    FSCListCreateRetrieveViewSet, PatientPagination, 
     ExamFilterSet, parse_query_params_to_string
 )
 from .serializers import PatientSerializer
@@ -16,7 +16,7 @@ from backend.core import FastResponseMixin
 from exam.api.serializers import ExamSerializer
 
 
-class PatientViewSet(FSListCreateRetrieveViewSet):
+class PatientViewSet(FSCListCreateRetrieveViewSet):
     '''Все про пациента'''
     queryset = Patient.objects.all().order_by('id')
     serializer_class = PatientSerializer

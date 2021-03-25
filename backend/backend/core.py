@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.generics import GenericAPIView
 
 class PermissionMixin:
     '''Mixin permission для action'''
