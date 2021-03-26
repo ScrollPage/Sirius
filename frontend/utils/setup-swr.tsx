@@ -1,7 +1,6 @@
 import React from "react";
 import { SWRConfig } from "swr";
-import axios from "axios";
-import Cookie from "js-cookie";
+import { instance } from "@/api/index";
 
 export const SWRProvider: React.ComponentType<{
   children: React.ReactElement;
@@ -13,14 +12,9 @@ export const SWRProvider: React.ComponentType<{
         revalidateOnFocus: true,
         dedupingInterval: 5000,
         fetcher: (url) =>
-          axios({
-            url: url,
-            baseURL: process.env.DB_HOST,
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Token ${Cookie.get("accessToken")}`,
-            },
-          }).then((r) => r.data),
+          instance()
+            .request(url)
+            .then((r) => r.data),
       }}
     >
       {children}

@@ -1,16 +1,16 @@
 import { instance } from '@/api';
-import { examUrl } from '@/utils/examUrl';
 import { getAsString } from '@/utils/getAsString';
+import { createApiWithQuery } from '@/utils/queryCode';
 import Router from 'next/router';
 import { trigger } from 'swr';
 
-export const changeExam = async (examId: number, diagnosis: string) => {
-  const patientId = Number(getAsString(Router.query.ID));
-  const diagnosisSearch = getAsString(Router.query.diagnosis) || "";
-  const typeSearch = getAsString(Router.query.type) || "";
+export const changeExam = async (examId: number, changedDiagnosis: string) => {
+  const patientId = getAsString(Router.query.ID);
+  const diagnosis = getAsString(Router.query.diagnosis);
+  const type = getAsString(Router.query.type);
   await instance()
     .patch(`/api/exam/${examId}/`, {
-      diagnosis
+      diagnosis: changedDiagnosis
     })
     .then(res => {
       console.log('Вы удачно сменили диагноз')
@@ -18,5 +18,8 @@ export const changeExam = async (examId: number, diagnosis: string) => {
     .catch(err => {
       console.log("Ошибка при изменении диагноза")
     })
-  trigger(examUrl(patientId, diagnosisSearch, typeSearch));
+  trigger(createApiWithQuery(`/api/patient/${patientId}/exam/`, {
+    diagnosis__contains: diagnosis,
+    sub_exams__check_type: type,
+  }));
 }

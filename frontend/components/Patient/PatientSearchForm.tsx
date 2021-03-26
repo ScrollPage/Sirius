@@ -6,53 +6,41 @@ import { getAsString } from "@/utils/getAsString";
 import { useRouter } from "next/router";
 import { SearchIcon } from "@chakra-ui/icons";
 import { object, number } from "yup";
-import { ParsedUrlQueryInput } from "node:querystring";
+import { createClearObject } from "@/utils/queryCode";
 
 interface FormValues {
-  name: string;
-  lower?: number;
-  greater?: number;
+  name?: string;
+  lower?: string;
+  greater?: string;
 }
 
 const validationSchema = object().shape({
-  lower: number().min(0, "> 0").max(200, "< 200"),
-  greater: number().min(0, "> 0").max(200, " < 200"),
+  lower: number().min(1, "> 0").max(200, "< 200"),
+  greater: number().min(1, "> 0").max(200, " < 200"),
 });
 
 export const PatientSearchForm = () => {
   const { query, push } = useRouter();
 
-  const name = getAsString(query.name) || "";
-  const lower = Number(getAsString(query.lower));
-  const greater = Number(getAsString(query.greater));
+  const name = getAsString(query.name);
+  const lower = getAsString(query.lower);
+  const greater = getAsString(query.greater);
 
   return (
     <Box width="full" mb="40px">
       <Formik
         initialValues={{
           name: name,
-          lower: lower || undefined,
-          greater: greater || undefined,
+          lower: lower,
+          greater: greater,
         }}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
-          let query: ParsedUrlQueryInput = {
-            ...values,
-          };
-          if (!values.name) {
-            delete query.name;
-          }
-          if (!values.lower) {
-            delete query.lower;
-          }
-          if (!values.greater) {
-            delete query.greater;
-          }
           push(
             {
               pathname: `/main`,
-              query,
+              query: createClearObject(values),
             },
             undefined,
             { shallow: true }

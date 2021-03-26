@@ -2,6 +2,7 @@ import { IUser } from './../types/user';
 import Cookie from 'js-cookie';
 import Router from 'next/router';
 import { instance } from '@/api';
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const initExpirationDate = () => {
   const expirationDate = new Date(new Date().getTime() + 24 * 3600 * 1000);
@@ -55,6 +56,13 @@ export const logout = () => {
 
 const getNewAccessToken = async () => {
   const refreshToken = Cookie.get('refreshToken');
+  try {
+    const fp = await FingerprintJS.load()
+    const result = await fp.get();
+    console.log(result);
+  } catch (e) {
+    logout()
+  }
   await instance()
     .post('/auth/jwt/refresh/', {
       refresh: refreshToken

@@ -16,7 +16,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useState } from "react";
-import { examUrl } from "@/utils/examUrl";
+import { createApiWithQuery } from "@/utils/queryCode";
 
 interface Props {
   patient: IPatient | null;
@@ -31,7 +31,10 @@ export default function Patient({ exams, patient }: Props) {
   const type = getAsString(query.type) || "";
 
   const { data: examsData, error } = useSWR(
-    examUrl(patientId, diagnosis, type),
+    createApiWithQuery(`/api/patient/${patientId}/exam/`, {
+      diagnosis__contains: diagnosis,
+      sub_exams__check_type: type,
+    }),
     {
       initialData: deepEqual(query, serverQuery) ? exams : undefined,
     }
@@ -61,14 +64,18 @@ export default function Patient({ exams, patient }: Props) {
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   ensureAuth(ctx, "private");
-  const patientId = Number(getAsString(ctx.query.ID));
-
-  const diagnosis = getAsString(ctx.query.diagnosis) || "";
-  const type = getAsString(ctx.query.type) || "";
+  const patientId = getAsString(ctx.query.ID);
+  const diagnosis = getAsString(ctx.query.diagnosis);
+  const type = getAsString(ctx.query.type);
 
   let exams: IExam[] | null = null;
   await instance(ctx)
-    .get(examUrl(patientId, diagnosis, type))
+    .get(
+      createApiWithQuery(`/api/patient/${patientId}/exam/`, {
+        diagnosis__contains: diagnosis,
+        sub_exams__check_type: type,
+      })
+    )
     .then((response: AxiosResponse) => {
       exams = response?.data ?? null;
     })

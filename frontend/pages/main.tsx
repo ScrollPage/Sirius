@@ -14,9 +14,9 @@ import { AxiosError, AxiosResponse } from "axios";
 import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
-import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import { createApiWithQuery, createClearObject } from "@/utils/queryCode";
 
 interface Props {
   patientPagination: PatientPagination | null;
@@ -25,18 +25,26 @@ interface Props {
 export default function Main({ patientPagination }: Props) {
   const { query, push } = useRouter();
   const [serverQuery] = useState(query);
-  const currentPage = Number(getAsString(query.page || "1"));
-  const name = getAsString(query.name) || "";
-  const lower = yearsToDate(Number(getAsString(query.lower) || "0"));
-  const greater = yearsToDate(Number(getAsString(query.greater) || "200"));
+  const [pagesQuantity, setPagesQuantity] = useState(
+    patientPagination?.page_num ?? 0
+  );
+  const currentPage = getAsString(query.page);
+  const name = getAsString(query.name);
+  const lower = yearsToDate(getAsString(query.lower));
+  const greater = yearsToDate(getAsString(query.greater));
 
   const setCurrentPage = (nextPage: number) => {
+    console.log(query);
+    const clearObject = createClearObject({
+      page: nextPage,
+      name,
+      lower,
+      greater,
+    });
     push(
       {
         pathname: `/main`,
-        query: {
-          page: nextPage,
-        },
+        query: clearObject,
       },
       undefined,
       {
@@ -46,7 +54,12 @@ export default function Main({ patientPagination }: Props) {
   };
 
   const { data: patientsData, error } = useSWR(
-    patientUrl(currentPage, name, lower, greater),
+    createApiWithQuery("/api/patient/", {
+      page: currentPage,
+      name__contains: name,
+      birth_date__lte: lower,
+      birth_date__gte: greater,
+    }),
     {
       initialData: deepEqual(query, serverQuery)
         ? patientPagination
@@ -54,46 +67,35 @@ export default function Main({ patientPagination }: Props) {
     }
   );
 
-  const pagesQuantity = patientsData?.page_num ?? 0;
-
-  const testFingerprint = async () => {
-    try {
-      const fp = await FingerprintJS.load();
-      const result = await fp.get();
-      console.log(result);
-    } catch (e) {
-      console.log(e);
+  useEffect(() => {
+    if (patientsData?.page_num !== undefined) {
+      setPagesQuantity(patientsData?.page_num ?? 0);
     }
-  };
+  }, [patientsData?.page_num]);
 
   return (
     <Layout title="Пациенты">
       <Head>
         <title>Пациенты</title>
       </Head>
-      <button onClick={testFingerprint}>get fingerprint</button>
       <SearchForm />
       <Paginator
         pagesQuantity={pagesQuantity}
-        currentPage={currentPage}
+        currentPage={Number(currentPage ?? 1)}
         setCurrentPage={setCurrentPage}
-      />
-      {error ? (
-        <Text>Ошибка загрузки пациентов</Text>
-      ) : !patientsData ? (
-        <Flex justifyContent="center" h="400px" align="center">
-          <Spinner size="xl" />
-        </Flex>
-      ) : patientsData.data.length === 0 ? (
-        <Text>Нет пациентов по вашему запросу</Text>
-      ) : (
-        <PatientList patients={patientsData.data} />
-      )}
-      <Paginator
-        pagesQuantity={pagesQuantity}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      >
+        {error ? (
+          <Text>Ошибка загрузки пациентов</Text>
+        ) : !patientsData ? (
+          <Flex justifyContent="center" h="400px" align="center">
+            <Spinner size="xl" />
+          </Flex>
+        ) : patientsData.data.length === 0 ? (
+          <Text>Нет пациентов по вашему запросу</Text>
+        ) : (
+          <PatientList patients={patientsData.data} />
+        )}
+      </Paginator>
     </Layout>
   );
 }
@@ -101,14 +103,21 @@ export default function Main({ patientPagination }: Props) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   ensureAuth(ctx, "private");
 
-  const currentPage = Number(getAsString(ctx.query.page || "1"));
-  const name = getAsString(ctx.query.name) || "";
-  const lower = yearsToDate(Number(getAsString(ctx.query.lower) || "0"));
-  const greater = yearsToDate(Number(getAsString(ctx.query.greater) || "200"));
+  const currentPage = getAsString(ctx.query.page);
+  const name = getAsString(ctx.query.name);
+  const lower = yearsToDate(getAsString(ctx.query.lower));
+  const greater = yearsToDate(getAsString(ctx.query.greater));
 
   let patientPagination: PatientPagination | null = null;
   await instance(ctx)
-    .get(patientUrl(currentPage, name, lower, greater))
+    .get(
+      createApiWithQuery("/api/patient/", {
+        page: currentPage,
+        name__contains: name,
+        birth_date__lte: lower,
+        birth_date__gte: greater,
+      })
+    )
     .then((response: AxiosResponse) => {
       patientPagination = response?.data ?? null;
     })
@@ -122,13 +131,3 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     },
   };
 };
-
-const patientUrl = (
-  currentPage: number,
-  name: string,
-  lower: string,
-  greater: string
-) =>
-  `/api/patient/?page=${currentPage}${
-    name ? `&name__contains=${name}` : ""
-  }&birth_date__lte=${lower}&birth_date__gte=${greater}`;
