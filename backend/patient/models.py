@@ -9,11 +9,11 @@ from django.contrib.auth.models import (
 )
 from django.conf import settings
 
-import redis
 from djoser.signals import user_registered
-
 from cacheops import invalidate_obj
 from random import randint
+
+from backend.core import RedisExecutor
 
 class Patient(models.Model):
     '''Кастомная модель пользователя'''
@@ -39,10 +39,6 @@ def invalidate_patient(sender, instance=None, created=False, **kwargs):
 
 @receiver(user_registered)
 def save_ip_addr(sender, user, request, **kwargs):
-    '''Добавляет айпи в пользователя в базу редис'''
-    pool = redis.ConnectionPool(
-        host=settings.REDIS_HOST, 
-        port=settings.REDIS_PORT, 
-        db=settings.DEFAULT_APP_REDIS_DB
-    )
-    pass
+    '''Добавляет айпи в пользователя в базу redis'''
+    conn = RedisExecutor(user, request)
+    conn.add_data_to_sets()
