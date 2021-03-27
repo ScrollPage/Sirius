@@ -19,6 +19,7 @@ import { useMemo, useState } from "react";
 import { createApiWithQuery } from "@/utils/queryCode";
 import { ExamService } from "@/api/exam";
 import { PatientService } from "@/api/patient";
+import { ConditionalList } from "@/components/UI/ConditionalList";
 
 interface Props {
   patient: IPatient | null;
@@ -54,17 +55,18 @@ export default function Patient({ exams, patient }: Props) {
       </Head>
       {patient && <PatientCard patient={patient} />}
       <ExamSearchForm />
-      {error ? (
-        <Text>Ошибка загрузки исследований</Text>
-      ) : !examsData ? (
-        <Flex justifyContent="center" h="400px" align="center">
-          <Spinner size="xl" />
-        </Flex>
-      ) : examsData.length === 0 ? (
-        <Text>Нет исследований по вашему запросу</Text>
-      ) : (
-        <ExamList exams={examsData} />
-      )}
+      <ConditionalList<IExam>
+        list={examsData}
+        error={error}
+        renderError={() => <Text>Ошибка загрузки исследований</Text>}
+        renderLoading={() => (
+          <Flex justifyContent="center" h="400px" align="center">
+            <Spinner size="xl" />
+          </Flex>
+        )}
+        renderEmpty={() => <Text>Нет исследований по вашему запросу</Text>}
+        renderExists={(list) => <ExamList exams={list} />}
+      />
     </Layout>
   );
 }
