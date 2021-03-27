@@ -1,24 +1,34 @@
 from rest_framework import serializers, exceptions
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.auth import authenticate
 
 from rest_framework_simplejwt.serializers import (
-    TokenObtainPairSerializer, TokenRefreshSerializer, TokenObtainSerializer
+    TokenObtainPairSerializer, TokenRefreshSerializer, 
+    TokenObtainSerializer, user_eligible_for_login
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
+from rest_framework_simplejwt.serializers import login_rule
+from rest_framework_simplejwt.serializers import api_settings
 from djoser.serializers import UserCreateSerializer
 from psycopg2 import OperationalError
 
 from backend.core import RedisExecutor, got_protected
 
-class ProtectedTokenObtainSerializer(TokenObtainSerializer):
-    '''Переопределена валидация, чтобы можно было отловить злоумыленника!'''
+
+class ProtectedInitSerializer(serializers.Serializer):
+    '''Переопределенный метод __init__'''
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if settings.ENABLE_AUTH_PROTECTION:
-            self.fields["fingerprint"] = serializers.CharField(max_length=32, min_length=32)
+            self.fields["fingerprint"] = serializers.CharField(
+                max_length=32, min_length=32, write_only=True
+            )
+
+class ProtectedTokenObtainSerializer(ProtectedInitSerializer, TokenObtainSerializer):
+    '''Переопределена валидация, чтобы можно было отловить злоумыленника!'''
 
     def validate(self, attrs):
         authenticate_kwargs = {
@@ -38,21 +48,22 @@ class ProtectedTokenObtainSerializer(TokenObtainSerializer):
                 'no_active_account',
             )
         else:
-            conn = RedisExecutor(user, self.context['request'])
+            conn = RedisExecutor(self.user, self.context['request'])
             conn.validate()
 
         return {}
 
+
 class ProtectedTokenObtainPairSerializer(
+    TokenObtainPairSerializer,
     ProtectedTokenObtainSerializer,
-    TokenObtainPairSerializer
 ):
     '''Защищенный сериализатор получения пары токенов'''
     pass
 
+
 class ProtectedTokenRefreshSerializer(
-    ProtectedTokenObtainSerializer, 
-    TokenRefreshSerializer
+    ProtectedInitSerializer, TokenRefreshSerializer
 ):
     '''Переопределена валидация, чтобы можно было отловить злоумыленника!'''
 
@@ -87,8 +98,10 @@ class ProtectedTokenRefreshSerializer(
 
         return data
 
+
 class ProtectedUserCreateSerializer(UserCreateSerializer):
     '''Добавлен фингерпринт при регистрации'''
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if settings.ENABLE_AUTH_PROTECTION:

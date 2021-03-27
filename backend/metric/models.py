@@ -32,12 +32,7 @@ class Point(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    name = models.CharField(max_length=50)
-    value = models.DecimalField('Значение', max_digits=12, decimal_places=6)
-    valueT = models.DecimalField('Значение T', max_digits=12, decimal_places=6)
-    normal = models.CharField(max_length=50)
-    show = models.IntegerField(default=0)
-    active = models.IntegerField(default=0)
+    index = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f'point in {self.sequence}'

@@ -1,6 +1,9 @@
 from django.conf import settings
 from django.core.mail import send_mail
 
+import random
+import string
+
 # from backend.celery import app as celery_app
 
 # @celery_app.task
@@ -13,7 +16,7 @@ def send_warning_email(user_email: str, key: str):
         fail_silently=False
     )
 
-def create_code():
+def create_token():
     return ''.join(
         random.choice(string.ascii_letters.split('z')[1] + string.digits) \
             for _ in range(6)

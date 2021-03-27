@@ -15,6 +15,7 @@ from random import randint
 
 from backend.core import RedisExecutor
 
+
 class Patient(models.Model):
     '''Кастомная модель пользователя'''
     birth_date = models.DateField('Дата рождения', null=True)

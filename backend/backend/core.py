@@ -43,7 +43,6 @@ class FastResponseMixin:
         return Response(serializer.data, status=status)
 
 
-
 def get_user_ip(request):
     '''Получение ip пользователя'''
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -54,18 +53,20 @@ def get_user_ip(request):
     
     return ip
 
+
+def is_prot_enabled(func):
+
+    def wrapper(self, user=None, request=None):
+        if settings.ENABLE_AUTH_PROTECTION:
+            func(self, user, request)
+        else:
+            pass
+    
+    return wrapper
+
+
 class RedisExecutor:
-    '''Для работы с редисом'''
-
-    def is_prot_enabled(func):
-
-        def wrapper(self, user=None, request=None):
-            if settings.ENABLE_AUTH_PROTECTION:
-                func(self, user, request)
-            else:
-                pass
-        
-        return wrapper
+    '''Для работы с редисом при защищенной аутентификации'''
 
     @is_prot_enabled
     def __init__(self, user, request):
@@ -85,8 +86,8 @@ class RedisExecutor:
         fingers = self.conn.smembers(f'user_{self.user.id}_fingerprint')
 
         if get_user_ip(self.request) not in ips or \
-            self.request.get['fingerprint'] not in finger:
-            got_protected.send(sender=self.user.__class__, user=user)
+            self.request.data['fingerprint'] not in fingers:
+            got_protected.send(sender=self.user.__class__, user=self.user)
             raise exceptions.NotAcceptable(f'The given data is not valid for this user.')
 
     @is_prot_enabled
