@@ -1,10 +1,9 @@
-import { ParsedUrlQuery } from 'querystring';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { GetServerSidePropsContext } from 'next';
 import Cookie from 'js-cookie';
 import { parseCookies } from '@/utils/parseCookies';
 
-export const instance = (ctx?: GetServerSidePropsContext<ParsedUrlQuery>) => {
+export const instance = (ctx?: GetServerSidePropsContext) => {
   let accessToken
   if (ctx) {
     accessToken = parseCookies(ctx.req).accessToken
@@ -25,7 +24,7 @@ type Methods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" | "OPTIONS"
 
 type Obj = { [key: string]: any };
 
-export const request = <T,>(method: Methods, url: string, data: Obj) => {
+export const request = <T,>(method: Methods, url: string, data: Obj, ctx?: GetServerSidePropsContext) => {
   const onSuccess = (response: AxiosResponse<T>) => {
     console.debug('Request Successful!', response);
     return response.data;
@@ -45,7 +44,7 @@ export const request = <T,>(method: Methods, url: string, data: Obj) => {
     return Promise.reject(error.response || error.message);
   }
 
-  return instance()
+  return instance(ctx)
     .request({
       url,
       method,

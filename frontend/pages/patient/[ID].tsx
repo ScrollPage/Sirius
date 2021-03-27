@@ -15,8 +15,10 @@ import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createApiWithQuery } from "@/utils/queryCode";
+import { ExamService } from "@/api/exam";
+import { PatientService } from "@/api/patient";
 
 interface Props {
   patient: IPatient | null;
@@ -30,11 +32,16 @@ export default function Patient({ exams, patient }: Props) {
   const diagnosis = getAsString(query.diagnosis) || "";
   const type = getAsString(query.type) || "";
 
-  const { data: examsData, error } = useSWR(
-    createApiWithQuery(`/api/patient/${patientId}/exam/`, {
+  const queries = useMemo(
+    () => ({
       diagnosis__contains: diagnosis,
       sub_exams__check_type: type,
     }),
+    [query]
+  );
+
+  const { data: examsData, error } = useSWR(
+    createApiWithQuery(`/api/patient/${patientId}/exam/`, queries),
     {
       initialData: deepEqual(query, serverQuery) ? exams : undefined,
     }
@@ -68,27 +75,21 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const diagnosis = getAsString(ctx.query.diagnosis);
   const type = getAsString(ctx.query.type);
 
+  const queries = {
+    diagnosis__contains: diagnosis,
+    sub_exams__check_type: type,
+  };
+
   let exams: IExam[] | null = null;
-  await instance(ctx)
-    .get(
-      createApiWithQuery(`/api/patient/${patientId}/exam/`, {
-        diagnosis__contains: diagnosis,
-        sub_exams__check_type: type,
-      })
-    )
-    .then((response: AxiosResponse) => {
-      exams = response?.data ?? null;
-    })
+  await ExamService.getByPatientId(patientId as string, queries, ctx)
+    .then((response) => (exams = response))
     .catch((error: AxiosError) => {
       console.log(error);
     });
 
   let patient: IPatient | null = null;
-  await instance(ctx)
-    .get(`/api/patient/${patientId}/`)
-    .then((response: AxiosResponse) => {
-      patient = response?.data ?? null;
-    })
+  await PatientService.getById(patientId as string, ctx)
+    .then((response) => (patient = response))
     .catch((error: AxiosError) => {
       console.log(error);
     });

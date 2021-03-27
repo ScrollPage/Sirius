@@ -38,7 +38,7 @@ const separatorStyles: ButtonProps = {
 
 interface Props {
   currentPage: number;
-  setCurrentPage: (nextPage: number) => void;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
   pagesQuantity: number;
   children: React.ReactNode;
 }

@@ -1,4 +1,4 @@
-type Obj = { [key: string]: (string | number | boolean | undefined) };
+export type Obj = { [key: string]: (string | number | boolean | undefined) };
 type ClearObj = { [key: string]: (string | number | boolean) };
 
 export const createApiWithQuery = (baseUrl: string, queryObject: Obj) => {
