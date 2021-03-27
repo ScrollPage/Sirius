@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { useMemo } from "react";
 import {
   Paginator as ChakraPaginator,
   Container,
@@ -38,7 +38,7 @@ const separatorStyles: ButtonProps = {
 
 interface Props {
   currentPage: number;
-  setCurrentPage: Dispatch<SetStateAction<number>>;
+  setCurrentPage: (page: number) => void;
   pagesQuantity: number;
   children: React.ReactNode;
 }
@@ -49,23 +49,26 @@ export const Paginator: React.FC<Props> = ({
   pagesQuantity,
   children,
 }) => {
-  const target = (
-    <ChakraPaginator
-      activeStyles={activeStyles}
-      innerLimit={innerLimit}
-      currentPage={currentPage}
-      outerLimit={outerLimit}
-      normalStyles={normalStyles}
-      separatorStyles={separatorStyles}
-      pagesQuantity={pagesQuantity}
-      onPageChange={setCurrentPage}
-    >
-      <Container align="center" justify="space-between" w="full" p={4}>
-        <Previous>Назад</Previous>
-        <PageGroup isInline align="center" />
-        <Next>Далее</Next>
-      </Container>
-    </ChakraPaginator>
+  const target = useMemo(
+    () => (
+      <ChakraPaginator
+        activeStyles={activeStyles}
+        innerLimit={innerLimit}
+        currentPage={currentPage}
+        outerLimit={outerLimit}
+        normalStyles={normalStyles}
+        separatorStyles={separatorStyles}
+        pagesQuantity={pagesQuantity}
+        onPageChange={setCurrentPage}
+      >
+        <Container align="center" justify="space-between" w="full" p={4}>
+          <Previous>Назад</Previous>
+          <PageGroup isInline align="center" />
+          <Next>Далее</Next>
+        </Container>
+      </ChakraPaginator>
+    ),
+    [currentPage, setCurrentPage, pagesQuantity]
   );
   return (
     <>

@@ -13,7 +13,7 @@ import { Spinner } from "@chakra-ui/spinner";
 import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import {
   createApiWithQuery,
@@ -75,6 +75,11 @@ export default function Main({ patientPagination }: Props) {
     }
   }, [patientsData?.page_num]);
 
+  const memSetCurrentPage = useCallback(
+    (page: number) => setCurrentPage(page),
+    [currentPage, setCurrentPage]
+  );
+
   return (
     <Layout title="Пациенты">
       <Head>
@@ -84,7 +89,7 @@ export default function Main({ patientPagination }: Props) {
       <Paginator
         pagesQuantity={pagesQuantity}
         currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        setCurrentPage={memSetCurrentPage}
       >
         {error ? (
           <Text>Ошибка загрузки пациентов</Text>
