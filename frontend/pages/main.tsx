@@ -34,17 +34,15 @@ export default function Main({ patientPagination }: Props) {
   const greater = yearsToDate(getAsString(query.greater));
 
   const setCurrentPage = (nextPage: number) => {
-    console.log(query);
-    const clearObject = createClearObject({
-      page: nextPage,
-      name,
-      lower,
-      greater,
-    });
     push(
       {
         pathname: `/main`,
-        query: clearObject,
+        query: createClearObject({
+          page: nextPage,
+          name,
+          lower,
+          greater,
+        }),
       },
       undefined,
       {

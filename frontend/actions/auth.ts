@@ -1,8 +1,7 @@
-import { IUser } from './../types/user';
 import Cookie from 'js-cookie';
 import Router from 'next/router';
-import { instance } from '@/api';
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import { AuthService } from '@/api/auth';
 
 const initExpirationDate = () => {
   const expirationDate = new Date(new Date().getTime() + 24 * 3600 * 1000);
@@ -10,16 +9,12 @@ const initExpirationDate = () => {
   checkAuthTimeout(24 * 3600 * 1000)
 }
 
-export const login = async (userName: string, password: string) => {
-  await instance()
-    .post('/auth/jwt/create/', {
-      username: userName,
-      password,
-    })
-    .then(res => {
+export const login = async (username: string, password: string) => {
+  await AuthService.login({ username, password })
+    .then(({ access, refresh }) => {
       initExpirationDate()
-      Cookie.set('accessToken', res.data.access);
-      Cookie.set('refreshToken', res.data.refresh);
+      Cookie.set('accessToken', access);
+      Cookie.set('refreshToken', refresh);
       authInfo()
       Router.push({ pathname: '/main' }, undefined, { shallow: true });
       console.log('Вы успешно вошли!');
@@ -30,10 +25,8 @@ export const login = async (userName: string, password: string) => {
 };
 
 const authInfo = async () => {
-  await instance()
-    .get('/auth/users/me/')
-    .then(res => {
-      const { id, username, email } = res.data as IUser;
+  await AuthService.session()
+    .then(({ id, username, email }) => {
       Cookie.set('userId', String(id));
       Cookie.set('userName', username);
       Cookie.set('email', email);
@@ -55,7 +48,7 @@ export const logout = () => {
 };
 
 const getNewAccessToken = async () => {
-  const refreshToken = Cookie.get('refreshToken');
+  const refresh = Cookie.get('refreshToken');
   try {
     const fp = await FingerprintJS.load()
     const result = await fp.get();
@@ -63,12 +56,9 @@ const getNewAccessToken = async () => {
   } catch (e) {
     logout()
   }
-  await instance()
-    .post('/auth/jwt/refresh/', {
-      refresh: refreshToken
-    })
-    .then((res) => {
-      Cookie.set('accessToken', res.data.access);
+  await AuthService.refresh({ refresh: refresh as string })
+    .then(({ access }) => {
+      Cookie.set('accessToken', access);
       initExpirationDate()
     })
     .catch(() => logout())
