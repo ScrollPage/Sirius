@@ -43,10 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework_simplejwt.token_blacklist',
     'cacheops',
     'corsheaders',
     'djoser',
     'drf_yasg',
+    'protected_auth',
     'rest_auth',
     'rest_framework',
     'rest_framework.authtoken',
@@ -169,7 +171,9 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': '#',
     'SEND_ACTIVATION_EMAIL': False,
-    'SERIALIZERS': {},
+    'SERIALIZERS': {
+        'user_create': 'protected_auth.serializers.ProtectedUserCreateSerializer'
+    },
 }
 
 #JWT Authentication
@@ -240,3 +244,6 @@ CACHEOPS_DEFAULTS = {
 CACHEOPS = {
     'patient.Patient': {'ops': 'all'}
 }
+
+# Auth protection
+ENABLE_AUTH_PROTECTION = True
