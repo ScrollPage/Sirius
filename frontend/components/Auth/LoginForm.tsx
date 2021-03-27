@@ -6,13 +6,13 @@ import { object, string } from "yup";
 import { login } from "@/actions/auth";
 
 interface FormValues {
-  userName: string;
+  username: string;
   password: string;
 }
 
 export const LoginForm = () => {
   const validationSchema = object().shape({
-    userName: string().required("Поле пустое"),
+    username: string().required("Поле пустое"),
     password: string()
       .matches(
         // @ts-ignore: Unreachable code error
@@ -26,13 +26,13 @@ export const LoginForm = () => {
     <Box width="full">
       <Formik
         initialValues={{
-          userName: "",
+          username: "",
           password: "",
         }}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          await login(values.userName, values.password);
+          await login(values.username, values.password);
           setSubmitting(false);
           resetForm();
         }}
@@ -42,7 +42,7 @@ export const LoginForm = () => {
             <MyField
               size="lg"
               label={"Логин"}
-              name="userName"
+              name="username"
               type="text"
               placeholder={"Введите логин"}
             />

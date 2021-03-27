@@ -44,6 +44,7 @@ export const MyField: React.FC<MyFieldProps> = ({
         w={w}
         type={type}
         placeholder={placeholder}
+        id={name}
       />
       {isShowError && (
         <FormErrorMessage fontSize="xs">{meta.error}</FormErrorMessage>

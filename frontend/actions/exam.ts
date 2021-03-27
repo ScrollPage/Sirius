@@ -1,4 +1,4 @@
-import { instance } from '@/api';
+import { ExamService } from '@/api/exam';
 import { getAsString } from '@/utils/getAsString';
 import { createApiWithQuery } from '@/utils/queryCode';
 import Router from 'next/router';
@@ -8,10 +8,7 @@ export const changeExam = async (examId: number, changedDiagnosis: string) => {
   const patientId = getAsString(Router.query.ID);
   const diagnosis = getAsString(Router.query.diagnosis);
   const type = getAsString(Router.query.type);
-  await instance()
-    .patch(`/api/exam/${examId}/`, {
-      diagnosis: changedDiagnosis
-    })
+  await ExamService.change(examId, { diagnosis: changedDiagnosis })
     .then(res => {
       console.log('Вы удачно сменили диагноз')
     })

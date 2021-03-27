@@ -6,7 +6,7 @@ import { getAsString } from "@/utils/getAsString";
 import { useRouter } from "next/router";
 import { SearchIcon } from "@chakra-ui/icons";
 import { object, number } from "yup";
-import { createClearObject } from "@/utils/queryCode";
+import { encodeQueryObjectToString } from "@/utils/queryCode";
 
 interface FormValues {
   name?: string;
@@ -20,7 +20,7 @@ const validationSchema = object().shape({
 });
 
 export const PatientSearchForm = () => {
-  const { query, push } = useRouter();
+  const { query } = useRouter();
 
   const name = getAsString(query.name);
   const lower = getAsString(query.lower);
@@ -37,13 +37,10 @@ export const PatientSearchForm = () => {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
-          push(
-            {
-              pathname: `/main`,
-              query: createClearObject(values),
-            },
-            undefined,
-            { shallow: true }
+          window.history.replaceState(
+            null,
+            "Change name, lower and greater",
+            encodeQueryObjectToString(values)
           );
           setSubmitting(false);
         }}

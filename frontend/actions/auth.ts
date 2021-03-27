@@ -1,8 +1,6 @@
-import { IUser } from './../types/user';
 import Cookie from 'js-cookie';
 import Router from 'next/router';
-import { instance } from '@/api';
-import FingerprintJS from "@fingerprintjs/fingerprintjs";
+import { AuthService } from '@/api/auth';
 
 const initExpirationDate = () => {
   const expirationDate = new Date(new Date().getTime() + 24 * 3600 * 1000);
@@ -10,33 +8,31 @@ const initExpirationDate = () => {
   checkAuthTimeout(24 * 3600 * 1000)
 }
 
-export const login = async (userName: string, password: string) => {
-  await instance()
-    .post('/auth/jwt/create/', {
-      username: userName,
-      password,
-    })
-    .then(res => {
-      initExpirationDate()
-      Cookie.set('accessToken', res.data.access);
-      Cookie.set('refreshToken', res.data.refresh);
-      authInfo()
-      Router.push({ pathname: '/main' }, undefined, { shallow: true });
-      console.log('Вы успешно вошли!');
-    })
-    .catch(() => {
-      console.log('Неверный логин или пароль, перепроверьте данные!');
-    });
+export const login = async (username: string, password: string) => {
+  await
+    AuthService
+      .fingerprint()
+      .then(({ visitorId }) => AuthService
+        .login({ username, password, fingerprint: visitorId }))
+      .then(({ access, refresh }) => {
+        initExpirationDate()
+        Cookie.set('accessToken', access);
+        Cookie.set('refreshToken', refresh);
+      })
+      .then(() => authInfo())
+      .catch(() => {
+        console.log('Не удалось войти!');
+      });
 };
 
 const authInfo = async () => {
-  await instance()
-    .get('/auth/users/me/')
-    .then(res => {
-      const { id, username, email } = res.data as IUser;
+  await AuthService
+    .session()
+    .then(({ id, username, email }) => {
       Cookie.set('userId', String(id));
       Cookie.set('userName', username);
       Cookie.set('email', email);
+      Router.push({ pathname: '/main' }, undefined, { shallow: true });
       console.log('Информация успешно занесена в куки');
     })
     .catch(() => {
@@ -55,20 +51,13 @@ export const logout = () => {
 };
 
 const getNewAccessToken = async () => {
-  const refreshToken = Cookie.get('refreshToken');
-  try {
-    const fp = await FingerprintJS.load()
-    const result = await fp.get();
-    console.log(result);
-  } catch (e) {
-    logout()
-  }
-  await instance()
-    .post('/auth/jwt/refresh/', {
-      refresh: refreshToken
-    })
-    .then((res) => {
-      Cookie.set('accessToken', res.data.access);
+  const refresh = Cookie.get('refreshToken');
+  await AuthService
+    .fingerprint()
+    .then(({ visitorId }) => AuthService
+      .refresh({ refresh: refresh as string, fingerprint: visitorId }))
+    .then(({ access }) => {
+      Cookie.set('accessToken', access);
       initExpirationDate()
     })
     .catch(() => logout())
