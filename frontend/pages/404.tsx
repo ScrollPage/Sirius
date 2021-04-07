@@ -10,7 +10,7 @@ export default function Custom404() {
   useEffect(() => {
     setTimeout(() => {
       push({ pathname: "/" }, undefined, {
-        shallow: true,
+        shallow: false,
       });
     }, 3000);
   }, []);

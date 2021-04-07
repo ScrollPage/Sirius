@@ -13,13 +13,7 @@ interface FormValues {
 export const LoginForm = () => {
   const validationSchema = object().shape({
     username: string().required("Поле пустое"),
-    password: string()
-      .matches(
-        // @ts-ignore: Unreachable code error
-        "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})",
-        "Слишком легкий пароль"
-      )
-      .required("Поле пустое"),
+    password: string().required("Поле пустое"),
   });
 
   return (

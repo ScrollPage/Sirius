@@ -1,6 +1,6 @@
 import { IUser } from '@/types/user'
 import { request } from './'
-import FingerprintJS, { GetResult } from "@fingerprintjs/fingerprintjs";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 export interface LoginData {
   username: string;
   password: string;

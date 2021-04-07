@@ -32,7 +32,7 @@ const authInfo = async () => {
       Cookie.set('userId', String(id));
       Cookie.set('userName', username);
       Cookie.set('email', email);
-      Router.push({ pathname: '/main' }, undefined, { shallow: true });
+      Router.push({ pathname: '/main' }, undefined, { shallow: false });
       console.log('Информация успешно занесена в куки');
     })
     .catch(() => {
@@ -41,7 +41,7 @@ const authInfo = async () => {
 }
 
 export const logout = () => {
-  Router.push({ pathname: '/' }, undefined, { shallow: true });
+  Router.push({ pathname: '/' }, undefined, { shallow: false });
   Cookie.remove('accessToken');
   Cookie.remove('refreshToken');
   Cookie.remove('expirationDate');
@@ -82,3 +82,4 @@ export const authCheckState = () => {
     }
   }
 };
+
