@@ -246,4 +246,4 @@ CACHEOPS = {
 }
 
 # Auth protection
-ENABLE_AUTH_PROTECTION = True
+ENABLE_AUTH_PROTECTION = False
