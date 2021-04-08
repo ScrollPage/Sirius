@@ -1,11 +1,16 @@
 from rest_framework import permissions, status
 from rest_framework.decorators import action
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import (
+    CreateModelMixin, UpdateModelMixin, 
+    DestroyModelMixin
+)
 from django.shortcuts import get_object_or_404 
 
 from .service import SFRetrieveUpdateDestroyCreateViewSet
-from .serializers import ExamSerializer, SubExamSerializer
+from .serializers import ExamSerializer, SubExamSerializer, DiagnosisSerializer
 from metric.api.serializers import SequenceSerializer
-from exam.models import Examination, SubExam
+from exam.models import Examination, SubExam, Diagnosis
 
 class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     '''
@@ -14,7 +19,8 @@ class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
 
     serializer_class = ExamSerializer
     serializer_class_by_action = {
-        'sub': SubExamSerializer
+        'sub': SubExamSerializer,
+        'diagnosis': DiagnosisSerializer
     }
     permissions_classes = [permissions.IsAuthenticated]
 
@@ -25,6 +31,11 @@ class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     def sub(self, request, *args, **kwargs):
         '''Подъисследования в исследовании'''
         return self.fast_response('sub_exams')
+
+    @action(detail=True, methods=['get'])
+    def diagnosis(self, request, *args, **kwargs):
+        '''Диагнозы'''
+        return self.fast_response('diagnosis')
 
 
 class SubExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
@@ -45,3 +56,12 @@ class SubExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     def sequence(self, request, *args, **kwargs):
         '''Временные ряды исследования'''
         return self.fast_response('sequences')
+
+class DiagnosisViewSet(
+    GenericViewSet, CreateModelMixin, 
+    UpdateModelMixin, DestroyModelMixin
+):
+    '''Создание, обновление, удаление диагноза'''
+    serializer_class = DiagnosisSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Diagnosis.objects.all()

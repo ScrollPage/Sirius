@@ -101,7 +101,6 @@ class Creator:
                         patient=get_object_or_404(Patient, id=exam[1]),
                         created=exam[2],
                         updated=exam[3],
-                        diagnosis=exam[5],
                         clinic=exam[6],
                     )
                 except django.db.utils.IntegrityError:

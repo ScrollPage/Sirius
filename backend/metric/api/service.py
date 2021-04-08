@@ -1,10 +1,13 @@
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import CreateModelMixin
-from backend.core import FastResponseMixin
+from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
 
-class FSequenceViewSet(FastResponseMixin, CreateModelMixin, GenericViewSet):
+from backend.core import PermissionMixin
+
+class PCreateDestroyViewSet(
+    CreateModelMixin, DestroyModelMixin,
+    PermissionMixin, GenericViewSet
+):
     '''
-    Функция быстрого ответа
-    Вью-сет
+    Создание, удаление
+    Переопределенный сериализатор
     '''
-    pass

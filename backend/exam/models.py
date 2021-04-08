@@ -11,7 +11,6 @@ class Examination(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    diagnosis = models.TextField(max_length=500, default='', null=True)
     clinic = models.CharField(max_length=200, default='', null=True)
 
     def __str__(self):
@@ -21,6 +20,21 @@ class Examination(models.Model):
         verbose_name = 'Исследование'
         verbose_name_plural = 'Исследования'
         db_table = 'examination'
+
+class Diagnosis(models.Model):
+    '''Модель диагноза'''
+
+    description = models.CharField('Описание', max_length=500)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    exam = models.ForeignKey(
+        Examination, verbose_name='Исследование', 
+        related_name='diagnosis', on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = 'Диагноз'
+        verbose_name_plural = 'Диагнозы'
 
 class SubExam(models.Model):
     '''Промежуточное исследование'''
