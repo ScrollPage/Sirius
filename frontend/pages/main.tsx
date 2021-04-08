@@ -7,18 +7,13 @@ import { PatientSearchForm as SearchForm } from "@/components/Patient/PatientSea
 import { IPatient, PatientPagination } from "@/types/patient";
 import { ensureAuth } from "@/utils/ensure";
 import { getAsString } from "@/utils/getAsString";
-import { yearsToDate } from "@/utils/yearsToDate";
-import { Flex, Text } from "@chakra-ui/layout";
-import { Spinner } from "@chakra-ui/spinner";
+import { Text } from "@chakra-ui/layout";
 import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
-import {
-  createApiWithQuery,
-  encodeQueryObjectToString,
-} from "@/utils/queryCode";
+import { createApiWithQuery, createClearObject } from "@/utils/queryCode";
 import { ConditionalList } from "@/components/UI/ConditionalList";
 
 interface Props {
@@ -26,32 +21,35 @@ interface Props {
 }
 
 export default function Main({ patientPagination }: Props) {
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const [serverQuery] = useState(query);
   const [currentPage, setCurrentPage] = useState<number>(
-    Number(getAsString(query.page) ?? "1")
+    Number(getAsString(query.page ?? "1"))
   );
   const [pagesQuantity, setPagesQuantity] = useState(
     patientPagination?.page_num ?? 0
   );
   const name = getAsString(query.name);
-  const lower = yearsToDate(getAsString(query.lower));
-  const greater = yearsToDate(getAsString(query.greater));
+  const lower = getAsString(query.lower);
+  const greater = getAsString(query.greater);
 
   useEffect(() => {
-    window.history.replaceState(
-      null,
-      "Change current page",
-      encodeQueryObjectToString({
-        page: currentPage,
-        name,
-        lower,
-        greater,
-      })
+    push(
+      {
+        pathname: `/main`,
+        query: createClearObject({
+          page: currentPage,
+          name,
+          lower,
+          greater,
+        }),
+      },
+      undefined,
+      { shallow: true }
     );
   }, [currentPage]);
 
-  const queries = useMemo(
+  const queriesForApi = useMemo(
     () => ({
       page: currentPage,
       name__contains: name,
@@ -62,7 +60,7 @@ export default function Main({ patientPagination }: Props) {
   );
 
   const { data: patientsData, error } = useSWR(
-    createApiWithQuery("/api/patient/", queries),
+    createApiWithQuery("/api/patient/", queriesForApi),
     {
       initialData: deepEqual(query, serverQuery)
         ? patientPagination
@@ -96,11 +94,6 @@ export default function Main({ patientPagination }: Props) {
           list={patientsData?.data}
           error={error}
           renderError={() => <Text>Ошибка загрузки пациентов</Text>}
-          renderLoading={() => (
-            <Flex justifyContent="center" h="400px" align="center">
-              <Spinner size="xl" />
-            </Flex>
-          )}
           renderEmpty={() => <Text>Нет пациентов по вашему запросу</Text>}
           renderExists={(list) => <PatientList patients={list} />}
         />
@@ -112,20 +105,15 @@ export default function Main({ patientPagination }: Props) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   ensureAuth(ctx, "private");
 
-  const currentPage = getAsString(ctx.query.page);
-  const name = getAsString(ctx.query.name);
-  const lower = yearsToDate(getAsString(ctx.query.lower));
-  const greater = yearsToDate(getAsString(ctx.query.greater));
-
-  const queries = {
-    page: currentPage,
-    name__contains: name,
-    birth_date__lte: lower,
-    birth_date__gte: greater,
+  const queriesForApi = {
+    page: getAsString(ctx.query.page),
+    name__contains: getAsString(ctx.query.name),
+    birth_date__lte: getAsString(ctx.query.lower),
+    birth_date__gte: getAsString(ctx.query.greater),
   };
 
   let patientPagination: PatientPagination | null = null;
-  await PatientService.getAll(queries, ctx)
+  await PatientService.getAll(queriesForApi, ctx)
     .then((response) => (patientPagination = response))
     .catch((error) => {
       console.log(error);

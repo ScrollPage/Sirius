@@ -19,7 +19,6 @@ export const encodeQueryObjectToString = (object: Obj) => {
   const result = Object.entries(clearObject)
     .map(pair => {
       atLeastOne = true
-      // @ts-ignore
       return pair.join('=')
     })
     .join('&');
@@ -34,6 +33,4 @@ export const createClearObject = (object: Obj): ClearObj => {
   return object as ClearObj
 }
 
-const isEmpty = (object: ClearObj): boolean => {
-  return Object.keys(object).length === 0
-}
+const isEmpty = (object: ClearObj): boolean => Object.keys(object).length === 0

@@ -1,12 +1,13 @@
-import React from "react";
+import { usePrevious } from "@/hooks/usePrevious";
+import React, { useMemo } from "react";
 
 interface Props<T> {
   list?: T[] | null;
   error: any;
   renderExists: (list: T[]) => React.ReactNode;
   renderEmpty: () => React.ReactNode;
-  renderLoading: () => React.ReactNode;
   renderError: (error: any) => React.ReactNode;
+  renderLoading?: () => React.ReactNode;
 }
 
 export const ConditionalList = <T,>({
@@ -14,15 +15,22 @@ export const ConditionalList = <T,>({
   error,
   renderExists,
   renderEmpty,
-  renderLoading,
   renderError,
+  renderLoading,
 }: Props<T>) => {
+  const prevData = usePrevious<T[]>(list);
+
+  const loader = useMemo(
+    () => (renderLoading ? renderLoading : renderExists(prevData)),
+    [prevData]
+  );
+
   return (
     <>
       {!!error
         ? renderError(error)
         : !list
-        ? renderLoading()
+        ? loader
         : list.length === 0
         ? renderEmpty
         : renderExists(list)}

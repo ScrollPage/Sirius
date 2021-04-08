@@ -1,5 +1,4 @@
 import deepEqual from "fast-deep-equal";
-import { instance } from "@/api";
 import { ExamList } from "@/components/Exam/ExamList";
 import { ExamSearchForm } from "@/components/Exam/ExamSearchForm";
 import { Layout } from "@/components/Layout/layout";
@@ -10,7 +9,7 @@ import { ensureAuth } from "@/utils/ensure";
 import { getAsString } from "@/utils/getAsString";
 import { Flex, Text } from "@chakra-ui/layout";
 import { Spinner } from "@chakra-ui/spinner";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
