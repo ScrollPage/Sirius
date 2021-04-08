@@ -35,10 +35,12 @@ class FastResponseMixin:
 
     def fast_response(
         self, field, status=status.HTTP_200_OK,
-        many=True, filtering='all'
+        many=True, filtering='all', ordering=None
     ):
         instance = self.get_object()
         instances = getattr(getattr(instance, field), filtering)()
+        if ordering:
+            instances = instances.order_by(ordering)
         serializer = self.get_serializer(instances, many=True)
         return Response(serializer.data, status=status)
 

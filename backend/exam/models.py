@@ -21,6 +21,10 @@ class Examination(models.Model):
         verbose_name_plural = 'Исследования'
         db_table = 'examination'
 
+    @property
+    def last_diagnosis(self):
+        return self.diagnosis.last()
+
 class Diagnosis(models.Model):
     '''Модель диагноза'''
 

@@ -35,7 +35,7 @@ class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     @action(detail=True, methods=['get'])
     def diagnosis(self, request, *args, **kwargs):
         '''Диагнозы'''
-        return self.fast_response('diagnosis')
+        return self.fast_response('diagnosis', ordering='-updated')
 
 
 class SubExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):

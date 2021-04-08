@@ -7,8 +7,7 @@ class PointSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Point
-        # exclude = ['id']
-        fields = '__all__'
+        exclude = ['id']
         read_only_fields = ['created', 'updated']
         extra_kwargs = {
             'sequence': {'write_only': True}
