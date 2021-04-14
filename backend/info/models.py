@@ -6,7 +6,7 @@ from patient.models import Patient
 from exam.models import Examination
 
 
-class Recomendations(models.Model):
+class Recomendation(models.Model):
     '''Рекоменндации и прочие заметки врача'''
 
     exam = models.OneToOneField(
@@ -139,7 +139,7 @@ def create_instances_for_exam(sender, instance=None, created=False, **kwargs):
     if created:
         EyeInfo.objects.create(exam=instance, side=1)
         EyeInfo.objects.create(exam=instance, side=2)
-        Recomendations.objects.create(exam=instance)
+        Recomendations.objects.create(id=instance.id, exam=instance)
 
 @receiver(post_save, sender=EyeInfo)
 def create_instances_for_info(sender, instance=None, created=False, **kwargs):

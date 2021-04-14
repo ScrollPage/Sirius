@@ -1,8 +1,11 @@
 from django.contrib import admin
 
-from .models import Recomendations, MakulaChoice, PereferyChoice, EyeInfo, ColorChoice, BorderChoice, DZN
+from .models import (
+    Recomendations, MakulaChoice, PereferyChoice, 
+    EyeInfo, ColorChoice, BorderChoice, DZN
+)
 
-admin.site.register(Recomendations)
+admin.site.register(Recomendation)
 admin.site.register(MakulaChoice)
 admin.site.register(PereferyChoice)
 admin.site.register(EyeInfo)

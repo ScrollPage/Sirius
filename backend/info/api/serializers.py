@@ -4,7 +4,7 @@ from django.db import IntegrityError
 
 from ..models import (
     MakulaChoice, PereferyChoice, ColorChoice, 
-    BorderChoice, EyeInfo, DZN
+    BorderChoice, EyeInfo, DZN, Recomendation
 )
 
 
@@ -45,3 +45,11 @@ class EyeInfoSerializer(serializers.ModelSerializer):
         model = EyeInfo
         exclude = ['exam']
         read_only_fields = ['created', 'updated', 'eye', 'exam']
+
+
+class RecomendationSerializer(serializers.ModelSerializer):
+    '''Сериализация рекомендации'''
+
+    class Meta:
+        model = Recomendation
+        exclude = exam

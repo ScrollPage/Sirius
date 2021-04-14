@@ -1,10 +1,13 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView
 from rest_framework import permissions
 
-from .serializers import ChoiceItemSeralizer, EyeInfoSerializer, DZNSerializer
+from .serializers import (
+    ChoiceItemSeralizer, EyeInfoSerializer, 
+    DZNSerializer, RecomendationSerializer
+)
 from ..models import (
     MakulaChoice, PereferyChoice, ColorChoice, 
-    BorderChoice, EyeInfo, DZN
+    BorderChoice, EyeInfo, DZN, Recomendation
 )
 
 
@@ -37,13 +40,21 @@ class BorderChoiceView(ListAPIView, CreateAPIView):
 
 
 class EyeInfoView(UpdateAPIView):
-    '''Все об информации о глазах'''
+    '''Обновление информации о глазах'''
     serializer_class = EyeInfoSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = EyeInfo.objects.all()
 
 
 class DZNView(UpdateAPIView):
+    '''Обноволение дзн'''
     serializer_class = DZNSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = DZN.objects.all()
+
+
+class RecomedationView(UpdateAPIView):
+    '''Обновление рекомендаций'''
+    serializer_class = RecomendationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Recomendation.objects.all()
