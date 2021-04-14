@@ -4,6 +4,7 @@ from django.dispatch import receiver
 
 from patient.models import Patient
 from exam.models import Examination
+from backend.core import ChoiceItem
 
 
 class Recomendation(models.Model):
@@ -18,17 +19,6 @@ class Recomendation(models.Model):
     class Meta:
         verbose_name = 'Рекомендация'
         verbose_name_plural = 'Рекомендации'
-
-
-class ChoiceItem(models.Model):
-    '''Объект выбора'''
-    name = models.CharField(max_length=100, unique=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        abstract = True
 
 
 class MakulaChoice(ChoiceItem):
@@ -132,6 +122,36 @@ class DZN(models.Model):
     class Meta:
         verbose_name = 'Диск зрительного нерва'
         verbose_name_plural = 'Диски зрительных нервов'
+
+class DiagnosisChoice(ChoiceItem):
+    '''Выбор диагноза'''
+    
+    class Meta:
+        verbose_name = 'Выбор диагноза'
+        verbose_name_plural = 'Выбор диагноза'
+
+class Diagnosis(models.Model):
+    '''Модель диагноза'''
+    
+    DIAGNOIS_CHOICE = (
+        (choice.id, choice.name) for choice in DiagnosisChoice.objects.all()
+    )
+
+    name = models.TextField(
+        'Название диагноза', default='',
+        choices=DIAGNOIS_CHOICE, max_length=100
+    )
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    confirmed = models.BooleanField(default=False)
+    exam = models.ForeignKey(
+        Examination, verbose_name='Исследование', 
+        related_name='diagnosis', on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = 'Диагноз'
+        verbose_name_plural = 'Диагнозы'
 
 @receiver(post_save, sender=Examination)
 def create_instances_for_exam(sender, instance=None, created=False, **kwargs):

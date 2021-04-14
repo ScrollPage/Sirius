@@ -8,9 +8,10 @@ from rest_framework.mixins import (
 from django.shortcuts import get_object_or_404 
 
 from .service import SFRetrieveUpdateDestroyCreateViewSet
-from .serializers import ExamSerializer, SubExamSerializer, DiagnosisSerializer
+from .serializers import ExamSerializer, SubExamSerializer
 from metric.api.serializers import SequenceSerializer
-from exam.models import Examination, SubExam, Diagnosis
+from exam.models import Examination, SubExam
+from info.api.serializers import DiagnosisSerializer
 
 class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     '''
@@ -56,12 +57,3 @@ class SubExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     def sequence(self, request, *args, **kwargs):
         '''Временные ряды исследования'''
         return self.fast_response('sequences')
-
-class DiagnosisViewSet(
-    GenericViewSet, CreateModelMixin, 
-    UpdateModelMixin, DestroyModelMixin
-):
-    '''Создание, обновление, удаление диагноза'''
-    serializer_class = DiagnosisSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Diagnosis.objects.all()

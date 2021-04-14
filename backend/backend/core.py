@@ -2,10 +2,23 @@ from rest_framework import status, exceptions
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from django.conf import settings
+from django.db import models
 
 import redis
 
 from .signals import got_protected
+
+
+class ChoiceItem(models.Model):
+    '''Объект выбора'''
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        abstract = True
+
 
 class PermissionMixin:
     '''Mixin permission для action'''

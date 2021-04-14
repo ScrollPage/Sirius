@@ -3,8 +3,8 @@ from rest_framework.exceptions import ParseError
 from django.db import IntegrityError
 
 from ..models import (
-    MakulaChoice, PereferyChoice, ColorChoice, 
-    BorderChoice, EyeInfo, DZN, Recomendation
+    MakulaChoice, PereferyChoice, ColorChoice, DiagnosisChoice,
+    BorderChoice, EyeInfo, DZN, Recomendation, Diagnosis
 )
 
 
@@ -17,7 +17,8 @@ class ChoiceItemSeralizer(serializers.Serializer):
         'makula': MakulaChoice,
         'perefery': PereferyChoice,
         'color': ColorChoice,
-        'border': BorderChoice 
+        'border': BorderChoice,
+        'diagnostic': DiagnosisChoice
     }
 
     def create(self, validated_data):
@@ -53,3 +54,14 @@ class RecomendationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recomendation
         exclude = ['exam']
+
+class DiagnosisSerializer(serializers.ModelSerializer):
+    '''Сериализация диагноза'''
+
+    class Meta:
+        model = Diagnosis
+        fields = '__all__'
+        read_only_fields = ['created', 'updated']
+        extra_kwargs = {
+            'exam': {'write_only': True}
+        }

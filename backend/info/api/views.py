@@ -3,12 +3,14 @@ from rest_framework import permissions
 
 from .serializers import (
     ChoiceItemSeralizer, EyeInfoSerializer, 
-    DZNSerializer, RecomendationSerializer
+    DZNSerializer, RecomendationSerializer,
+    DiagnosisSerializer
 )
 from ..models import (
-    MakulaChoice, PereferyChoice, ColorChoice, 
-    BorderChoice, EyeInfo, DZN, Recomendation
+    MakulaChoice, PereferyChoice, ColorChoice, DiagnosisChoice,
+    BorderChoice, EyeInfo, DZN, Recomendation, Diagnosis
 )
+from .service import CreateUpdateDEstroyViewSet
 
 
 class MakulaChoiceView(ListAPIView, CreateAPIView):
@@ -39,6 +41,13 @@ class BorderChoiceView(ListAPIView, CreateAPIView):
     queryset = BorderChoice.objects.all()
 
 
+class DiagnosisChoiceView(ListAPIView, CreateAPIView):
+    '''Список возможных вариантов границы'''
+    serializer_class = ChoiceItemSeralizer
+    permissions = [permissions.IsAuthenticated]
+    queryset = DiagnosisChoice.objects.all()
+
+
 class EyeInfoView(UpdateAPIView):
     '''Обновление информации о глазах'''
     serializer_class = EyeInfoSerializer
@@ -58,3 +67,9 @@ class RecomedationView(UpdateAPIView):
     serializer_class = RecomendationSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Recomendation.objects.all()
+
+
+class DiagnosisViewSet(CreateUpdateDEstroyViewSet):
+    serializer_class = DiagnosisSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Diagnosis.objects.all()

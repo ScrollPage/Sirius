@@ -3,6 +3,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from patient.models import Patient
+from backend.core import ChoiceItem
+
 
 class Examination(models.Model):
     '''Исследование'''
@@ -13,7 +15,10 @@ class Examination(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    clinic = models.CharField(max_length=200, default='', null=True)
+    clinic = models.CharField(
+        'Клиника, в которой произвели исследование', 
+        max_length=200, default='', null=True
+    )
 
     def __str__(self):
         return f"{self.patient}'s examination"
@@ -27,21 +32,6 @@ class Examination(models.Model):
     def last_diagnosis(self):
         return self.diagnosis.last()
 
-class Diagnosis(models.Model):
-    '''Модель диагноза'''
-    
-    description = models.TextField('Описание', max_length=500)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    confirmed = models.BooleanField(default=False)
-    exam = models.ForeignKey(
-        Examination, verbose_name='Исследование', 
-        related_name='diagnosis', on_delete=models.CASCADE
-    )
-
-    class Meta:
-        verbose_name = 'Диагноз'
-        verbose_name_plural = 'Диагнозы'
 
 class SubExam(models.Model):
     '''Промежуточное исследование'''
