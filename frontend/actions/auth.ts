@@ -9,7 +9,7 @@ const initExpirationDate = () => {
 }
 
 export const login = async (username: string, password: string) => {
-  await
+  return await
     AuthService
       .fingerprint()
       .then(({ visitorId }) => AuthService
@@ -20,13 +20,10 @@ export const login = async (username: string, password: string) => {
         Cookie.set('refreshToken', refresh);
       })
       .then(() => authInfo())
-      .catch(() => {
-        console.log('Не удалось войти!');
-      });
 };
 
 const authInfo = async () => {
-  await AuthService
+  return await AuthService
     .session()
     .then(({ id, username, email }) => {
       Cookie.set('userId', String(id));
@@ -35,9 +32,6 @@ const authInfo = async () => {
       Router.push({ pathname: '/main' }, undefined, { shallow: false });
       console.log('Информация успешно занесена в куки');
     })
-    .catch(() => {
-      console.log('Ошибка при взятии информации о пользователе!');
-    });
 }
 
 export const logout = () => {
