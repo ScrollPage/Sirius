@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from patient.models import Patient
 from exam.models import Examination
@@ -37,7 +39,7 @@ class MakulaChoice(ChoiceItem):
         verbose_name_plural = 'Выбор макулы'
 
 class PereferyChoice(ChoiceItem):
-    '''Выбор макулы'''
+    '''Выбор периферии'''
 
     class Meta:
         verbose_name = 'Выбор периферии'
@@ -77,7 +79,7 @@ class EyeInfo(models.Model):
         'Переферия', max_length=100, 
         choices=PEREFERY_CHOICES, default=''
     )
-    sight_area = models.CharField('Поле зрения', max_length=100)
+    sight_area = models.CharField('Поле зрения', max_length=100, default='default')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -94,13 +96,11 @@ class ColorChoice(ChoiceItem):
         verbose_name_plural = 'Выбор цвета дзн'
 
 
-
 class BorderChoice(ChoiceItem):
     '''Границы дзн'''
     class Meta:
         verbose_name = 'Выбор границы дзн'
         verbose_name_plural = 'Выбор границы дзн'
-
 
 
 class DZN(models.Model):
@@ -126,7 +126,22 @@ class DZN(models.Model):
         'Границы', choices=BORDER_CHOICES, 
         max_length=100, default=''
     )
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'Диск зрительного нерва'
         verbose_name_plural = 'Диски зрительных нервов'
+
+@receiver(post_save, sender=Examination)
+def create_instances_for_exam(sender, instance=None, created=False, **kwargs):
+    '''Создает доп. модели'''
+    if created:
+        EyeInfo.objects.create(exam=instance, eye=1)
+        EyeInfo.objects.create(exam=instance, eye=2)
+
+@receiver(post_save, sender=EyeInfo)
+def create_instances_for_info(sender, instance=None, created=False, **kwargs):
+    '''Создает доп. модели'''
+    if created:
+        DZN.objects.create(id=instance.id, info=instance)

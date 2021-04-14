@@ -21,7 +21,7 @@ from .yasg import urlpatterns as doc_urls
 urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('auth/', include('djoser.urls')),
-    path('auth/', include('protected_auth.urls')),
+    path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.urls.jwt')),
     path('silk/', include('silk.urls')),
 

@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from exam.models import Examination, SubExam, Diagnosis
 from metric.api.serializers import PointSerializer
+from info.api.serializers import EyeInfoSerializer
 
 class DiagnosisSerializer(serializers.ModelSerializer):
     '''Сериализация диагноза'''
@@ -16,7 +17,8 @@ class DiagnosisSerializer(serializers.ModelSerializer):
 
 class ExamSerializer(serializers.ModelSerializer):
     '''Сериализатор исследования'''
-    last_diagnosis = DiagnosisSerializer()
+    last_diagnosis = DiagnosisSerializer(read_only=True)
+    eyes_info = EyeInfoSerializer(read_only=True, many=True)
 
     class Meta:
         model = Examination
