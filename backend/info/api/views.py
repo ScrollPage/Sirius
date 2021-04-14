@@ -7,7 +7,7 @@ from .serializers import (
     DiagnosisSerializer
 )
 from ..models import (
-    MakulaChoice, PereferyChoice, ColorChoice, DiagnosisChoice,
+    MakulaChoice, PeripheryChoice, ColorChoice, DiagnosisChoice,
     BorderChoice, EyeInfo, DZN, Recomendation, Diagnosis
 )
 from .service import CreateUpdateDEstroyViewSet
@@ -20,11 +20,11 @@ class MakulaChoiceView(ListAPIView, CreateAPIView):
     queryset = MakulaChoice.objects.all()
 
 
-class PereferyChoiceView(ListAPIView, CreateAPIView):
+class PeripheryChoiceView(ListAPIView, CreateAPIView):
     '''Список возможных вариантов макулы'''
     serializer_class = ChoiceItemSeralizer
     permissions = [permissions.IsAuthenticated]
-    queryset = PereferyChoice.objects.all()
+    queryset = PeripheryChoice.objects.all()
 
 
 class ColorChoiceView(ListAPIView, CreateAPIView):

@@ -28,7 +28,7 @@ class MakulaChoice(ChoiceItem):
         verbose_name = 'Выбор макулы'
         verbose_name_plural = 'Выбор макулы'
 
-class PereferyChoice(ChoiceItem):
+class PeripheryChoice(ChoiceItem):
     '''Выбор периферии'''
 
     class Meta:
@@ -54,7 +54,7 @@ class EyeInfo(models.Model):
         max_digits=4, decimal_places=2
     )
     makula = models.CharField('Макула', max_length=100, default='')
-    periphery = models.CharField('Переферия', max_length=100, default='')
+    periphery = models.CharField('Периферия', max_length=100, default='')
     sight_area = models.CharField(
         'Поле зрения', max_length=100, 
         default='default'
@@ -128,7 +128,7 @@ def create_instances_for_exam(sender, instance=None, created=False, **kwargs):
     if created:
         EyeInfo.objects.create(exam=instance, side=1)
         EyeInfo.objects.create(exam=instance, side=2)
-        Recomendations.objects.create(id=instance.id, exam=instance)
+        Recomendation.objects.create(id=instance.id, exam=instance)
 
 @receiver(post_save, sender=EyeInfo)
 def create_instances_for_info(sender, instance=None, created=False, **kwargs):

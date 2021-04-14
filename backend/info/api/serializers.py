@@ -3,7 +3,7 @@ from rest_framework.exceptions import ParseError
 from django.db import IntegrityError
 
 from ..models import (
-    MakulaChoice, PereferyChoice, ColorChoice, DiagnosisChoice,
+    MakulaChoice, PeripheryChoice, ColorChoice, DiagnosisChoice,
     BorderChoice, EyeInfo, DZN, Recomendation, Diagnosis
 )
 
@@ -15,7 +15,7 @@ class ChoiceItemSeralizer(serializers.Serializer):
 
     mapping_dict = {
         'makula': MakulaChoice,
-        'perefery': PereferyChoice,
+        'periphery': PeripheryChoice,
         'color': ColorChoice,
         'border': BorderChoice,
         'diagnostic': DiagnosisChoice
