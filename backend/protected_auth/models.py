@@ -18,7 +18,7 @@ class ProtectionToken(models.Model):
     chat_id = models.CharField(max_length=50, null=True)
 
     @classmethod
-    def create_unique_token(cls, user) -> models.Model:
+    def create_unique_token(cls, user):
         cls.objects.filter(user=user).delete()
         while True:
             token, created = cls.objects.get_or_create(

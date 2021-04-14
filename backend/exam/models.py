@@ -31,6 +31,7 @@ class Diagnosis(models.Model):
     description = models.CharField('Описание', max_length=500)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    confirmed = models.BooleanField(default=False)
     exam = models.ForeignKey(
         Examination, verbose_name='Исследование', 
         related_name='diagnosis', on_delete=models.CASCADE

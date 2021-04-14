@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'rest_framework_simplejwt.token_blacklist',
+    # 'rest_framework_simplejwt.token_blacklist',
     'cacheops',
     'corsheaders',
     'djoser',
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'silk',
 
     'exam',
+    'info',
     'metric',
     'patient',
 ]
@@ -242,7 +243,8 @@ CACHEOPS_DEFAULTS = {
 }
 
 CACHEOPS = {
-    'patient.Patient': {'ops': 'all'}
+    'patient.Patient': {'ops': 'all'},
+    'exam.Examination': {'ops': 'all'}
 }
 
 # Auth protection

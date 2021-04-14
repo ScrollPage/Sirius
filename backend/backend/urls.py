@@ -28,6 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('api/', include('exam.api.urls')),
+    path('api/', include('info.api.urls')),
     path('api/',include('metric.api.urls')),
     path('api/', include('patient.api.urls')),
 ]
