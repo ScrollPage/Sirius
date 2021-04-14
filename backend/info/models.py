@@ -137,8 +137,8 @@ class DZN(models.Model):
 def create_instances_for_exam(sender, instance=None, created=False, **kwargs):
     '''Создает доп. модели'''
     if created:
-        EyeInfo.objects.create(exam=instance, eye=1)
-        EyeInfo.objects.create(exam=instance, eye=2)
+        EyeInfo.objects.create(exam=instance, side=1)
+        EyeInfo.objects.create(exam=instance, side=2)
 
 @receiver(post_save, sender=EyeInfo)
 def create_instances_for_info(sender, instance=None, created=False, **kwargs):
