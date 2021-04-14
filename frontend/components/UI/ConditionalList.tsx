@@ -27,7 +27,7 @@ export const ConditionalList = <T,>({
 
   return (
     <>
-      {!!error
+      {error
         ? renderError(error)
         : !list
         ? loader

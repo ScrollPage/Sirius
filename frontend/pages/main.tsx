@@ -32,6 +32,8 @@ export default function Main({ patientPagination }: Props) {
   const name = getAsString(query.name);
   const lower = getAsString(query.lower);
   const greater = getAsString(query.greater);
+  const diagnosis = getAsString(query.diagnosis);
+  const type = getAsString(query.type);
 
   useEffect(() => {
     push(
@@ -42,6 +44,8 @@ export default function Main({ patientPagination }: Props) {
           name,
           lower,
           greater,
+          diagnosis,
+          type,
         }),
       },
       undefined,
@@ -55,6 +59,8 @@ export default function Main({ patientPagination }: Props) {
       name__contains: name,
       birth_date__lte: lower,
       birth_date__gte: greater,
+      diagnosis__contains: diagnosis,
+      sub_exams__check_type: type,
     }),
     [query]
   );
@@ -110,6 +116,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     name__contains: getAsString(ctx.query.name),
     birth_date__lte: getAsString(ctx.query.lower),
     birth_date__gte: getAsString(ctx.query.greater),
+    diagnosis__contains: getAsString(ctx.query.diagnosis),
+    sub_exams__check_type: getAsString(ctx.query.type),
   };
 
   let patientPagination: PatientPagination | null = null;

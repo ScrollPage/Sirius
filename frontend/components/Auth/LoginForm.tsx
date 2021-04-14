@@ -3,14 +3,19 @@ import { Form, Formik, FormikProps } from "formik";
 import React from "react";
 import { MyField } from "@/components/UI/MyField";
 import { object, string } from "yup";
-import { login } from "@/actions/auth";
+import { usePageLoading } from "@/hooks/usePageLoading";
 
-interface FormValues {
+interface Props {
+  handleSubmit: (values: LoginFormValues) => void;
+}
+export interface LoginFormValues {
   username: string;
   password: string;
 }
 
-export const LoginForm = () => {
+export const LoginForm: React.FC<Props> = ({ handleSubmit }) => {
+  const isPageLoding = usePageLoading();
+
   const validationSchema = object().shape({
     username: string().required("Поле пустое"),
     password: string().required("Поле пустое"),
@@ -24,14 +29,13 @@ export const LoginForm = () => {
           password: "",
         }}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
-          await login(values.username, values.password);
+          await handleSubmit(values);
           setSubmitting(false);
-          resetForm();
         }}
       >
-        {(props: FormikProps<FormValues>) => (
+        {({ isSubmitting }: FormikProps<LoginFormValues>) => (
           <Form>
             <MyField
               size="lg"
@@ -52,7 +56,7 @@ export const LoginForm = () => {
                 type="submit"
                 w="300px"
                 mt="8"
-                isLoading={props.isSubmitting}
+                isLoading={isSubmitting || isPageLoding}
                 colorScheme="purple"
               >
                 Войти
