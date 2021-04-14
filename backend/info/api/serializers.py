@@ -34,7 +34,7 @@ class DZNSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DZN
-        fields = '__all__'
+        exclude = ['info']
         read_only_fields = ['created', 'updated', 'info']
 
 class EyeInfoSerializer(serializers.ModelSerializer):
@@ -43,5 +43,5 @@ class EyeInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EyeInfo
-        fields = '__all__'
+        exclude = ['exam']
         read_only_fields = ['created', 'updated', 'eye', 'exam']

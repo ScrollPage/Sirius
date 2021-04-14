@@ -70,7 +70,7 @@ class Creator:
                 try:
                     eye = seq[4]['eye']
                 except KeyError:
-                    eye = '-'
+                    eye = ''
                 try:
                     Sequence.objects.create(
                         id=seq[0]-begin_id,

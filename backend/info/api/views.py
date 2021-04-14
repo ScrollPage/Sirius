@@ -42,6 +42,7 @@ class EyeInfoView(UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = EyeInfo.objects.all()
 
+
 class DZNView(UpdateAPIView):
     serializer_class = DZNSerializer
     permission_classes = [permissions.IsAuthenticated]
