@@ -4,7 +4,7 @@ from django.db import IntegrityError
 
 from ..models import (
     MakulaChoice, PereferyChoice, ColorChoice, 
-    BorderChoice, EyeInfo
+    BorderChoice, EyeInfo, DZN
 )
 
 
@@ -29,13 +29,19 @@ class ChoiceItemSeralizer(serializers.Serializer):
             raise ParseError('Object already exists.')
         return model
 
+class DZNSerializer(serializers.ModelSerializer):
+    '''Сериализацяи информации о глазах'''
+
+    class Meta:
+        model = DZN
+        fields = '__all__'
+        read_only_fields = ['created', 'updated', 'info']
+
 class EyeInfoSerializer(serializers.ModelSerializer):
     '''Сериализацяи информации о глазах'''
+    dzn = DZNSerializer(read_only=True)
 
     class Meta:
         model = EyeInfo
         fields = '__all__'
-        read_only_fields = ['created', 'updated']
-        extra_kwargs = {
-            'patient': {'write_only': True}
-        }
+        read_only_fields = ['created', 'updated', 'eye', 'exam']

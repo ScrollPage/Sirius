@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from patient.models import Patient
 
@@ -27,8 +29,8 @@ class Examination(models.Model):
 
 class Diagnosis(models.Model):
     '''Модель диагноза'''
-
-    description = models.CharField('Описание', max_length=500)
+    
+    description = models.TextField('Описание', max_length=500)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     confirmed = models.BooleanField(default=False)
@@ -59,3 +61,10 @@ class SubExam(models.Model):
         verbose_name = 'Подъисследование'
         verbose_name_plural = 'Подъисследование'
         db_table = 'port'
+
+
+@receiver(post_save, sender=Examination)
+def invalidate_exam(sender, instance=None, created=False, **kwargs):
+    '''Инвалидирует сущность'''
+    if not created:
+        invalidate_obj(instance)
