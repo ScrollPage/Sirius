@@ -52,4 +52,4 @@ class RecomendationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recomendation
-        exclude = exam
+        exclude = ['exam']

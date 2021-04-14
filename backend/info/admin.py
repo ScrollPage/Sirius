@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (
-    Recomendations, MakulaChoice, PereferyChoice, 
+    Recomendation, MakulaChoice, PereferyChoice, 
     EyeInfo, ColorChoice, BorderChoice, DZN
 )
 
