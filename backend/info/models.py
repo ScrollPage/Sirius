@@ -39,20 +39,12 @@ class PereferyChoice(ChoiceItem):
 class EyeInfo(models.Model):
     '''Информация, заполняемая врачом'''
 
-    MAKULA_CHOICES = (
-        (choice.id, choice.name) for choice in MakulaChoice.objects.all()
-    )
-
-    PEREFERY_CHOICES = (
-        (choice.id, choice.name) for choice in PereferyChoice.objects.all()
-    )
-
     EYE_CHOICES = (
         (1, 'Левый'),
         (2, 'Правый'),
     )
 
-    side = models.CharField('Тип глаза', choices=EYE_CHOICES, max_length=6)
+    side = models.CharField('Тип глаза', max_length=6)
     exam = models.ForeignKey(
         Examination, verbose_name='Исследование', 
         on_delete=models.CASCADE, related_name='eyes_info'
@@ -61,15 +53,12 @@ class EyeInfo(models.Model):
         'Острота зрения', default=0.00,
         max_digits=4, decimal_places=2
     )
-    makula = models.CharField(
-        'Макула', max_length=100, 
-        choices=MAKULA_CHOICES, default=''
+    makula = models.CharField('Макула', max_length=100, default='')
+    periphery = models.CharField('Переферия', max_length=100, default='')
+    sight_area = models.CharField(
+        'Поле зрения', max_length=100, 
+        default='default'
     )
-    periphery = models.CharField(
-        'Переферия', max_length=100, 
-        choices=PEREFERY_CHOICES, default=''
-    )
-    sight_area = models.CharField('Поле зрения', max_length=100, default='default')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -96,26 +85,12 @@ class BorderChoice(ChoiceItem):
 class DZN(models.Model):
     '''Диск зрительного нерва'''
 
-    COLOR_CHOICES = (
-        (choice.id, choice.name) for choice in ColorChoice.objects.all()
-    )
-
-    BORDER_CHOICES = (
-        (choice.id, choice.name) for choice in BorderChoice.objects.all()
-    )
-
     info = models.OneToOneField(
         EyeInfo, verbose_name='Информация о глазе', 
         on_delete=models.CASCADE, related_name='dzn'
     )
-    color = models.CharField(
-        'Цвет', choices=COLOR_CHOICES, 
-        max_length=100, default=''
-    )
-    border = models.CharField(
-        'Границы', choices=BORDER_CHOICES, 
-        max_length=100, default=''
-    )
+    color = models.CharField('Цвет', max_length=100, default='')
+    border = models.CharField('Границы', max_length=100, default='')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -130,17 +105,11 @@ class DiagnosisChoice(ChoiceItem):
         verbose_name = 'Выбор диагноза'
         verbose_name_plural = 'Выбор диагноза'
 
+
 class Diagnosis(models.Model):
     '''Модель диагноза'''
-    
-    DIAGNOIS_CHOICE = (
-        (choice.id, choice.name) for choice in DiagnosisChoice.objects.all()
-    )
 
-    name = models.TextField(
-        'Название диагноза', default='',
-        choices=DIAGNOIS_CHOICE, max_length=100
-    )
+    name = models.TextField('Название диагноза', default='', max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     confirmed = models.BooleanField(default=False)

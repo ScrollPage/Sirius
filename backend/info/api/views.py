@@ -42,7 +42,7 @@ class BorderChoiceView(ListAPIView, CreateAPIView):
 
 
 class DiagnosisChoiceView(ListAPIView, CreateAPIView):
-    '''Список возможных вариантов границы'''
+    '''Список возможных вариантов диагноза'''
     serializer_class = ChoiceItemSeralizer
     permissions = [permissions.IsAuthenticated]
     queryset = DiagnosisChoice.objects.all()
