@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from cacheops import invalidate_obj
+
 from patient.models import Patient
 from backend.core import ChoiceItem
 
