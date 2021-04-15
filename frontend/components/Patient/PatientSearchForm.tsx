@@ -127,7 +127,7 @@ export const PatientSearchForm = () => {
                 />
               </Box>
               <Button
-                mt="45px"
+                mt="50px"
                 h="48px"
                 type="submit"
                 isLoading={isSubmitting}

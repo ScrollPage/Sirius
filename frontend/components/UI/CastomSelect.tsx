@@ -13,13 +13,13 @@ interface Props extends SelectProps {
   label: string;
 }
 
-export const Select: React.FC<Props> = ({ data, label, ...props }) => {
+export const Select: React.FC<Props> = ({ data, label, size, ...props }) => {
   return (
     <FormControl mt="4" w="100">
       <FormLabel>
-        <Text fontSize="sm">{label}</Text>
+        <Text fontSize={size}>{label}</Text>
       </FormLabel>
-      <ChakraSelect {...props}>
+      <ChakraSelect size={size} {...props}>
         {data?.map((type) => (
           <option key={`type__item__key__${type.id}`} value={type.name}>
             {type.name}

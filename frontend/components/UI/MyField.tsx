@@ -36,7 +36,7 @@ export const MyField: React.FC<MyFieldProps> = ({
   return (
     <FormControl mt="4" isInvalid={isShowError} w={w}>
       <FormLabel w={w}>
-        <Text fontSize="sm">{label}</Text>
+        <Text fontSize={size}>{label}</Text>
       </FormLabel>
       <Target
         {...field}

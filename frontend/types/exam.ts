@@ -1,3 +1,5 @@
+import { IDiagnosis } from "./diagnosis";
+
 interface IDzn {
   id: number;
   color?: string;
@@ -20,7 +22,7 @@ interface IEye {
 
 export interface IExam {
   id: number;
-  last_diagnosis?: string;
+  last_diagnosis?: IDiagnosis;
   eyes_info: IEye[];
   created: Date;
   updated: Date;

@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, useToast } from "@chakra-ui/react";
 import { FieldArray, Form, Formik, FormikProps } from "formik";
 import React, { useMemo } from "react";
 import { IExam } from "@/types/exam";
@@ -28,32 +28,38 @@ export interface ExamFormValues {
   periphery: stringAndU[];
 }
 interface Props {
-  examId: number;
-  defaultExam?: IExam;
+  defaultExam: IExam;
   onClose: () => void;
 }
 
-export const ExamForm: React.FC<Props> = ({ defaultExam, onClose, examId }) => {
-  const leftEye = useMemo(() => defaultExam?.eyes_info[0], [defaultExam]);
-  const RightEye = useMemo(() => defaultExam?.eyes_info[1], [defaultExam]);
+export const ExamForm: React.FC<Props> = ({ defaultExam, onClose }) => {
+  const toast = useToast();
+
+  const leftEye = useMemo(() => defaultExam.eyes_info[0], [defaultExam]);
+  const rightEye = useMemo(() => defaultExam.eyes_info[1], [defaultExam]);
 
   return (
     <Box width="full">
       <Formik
         initialValues={{
-          sight_sharpness: [
-            leftEye?.sight_sharpness,
-            RightEye?.sight_sharpness,
-          ],
-          color: [leftEye?.dzn.color, RightEye?.dzn.color],
-          border: [leftEye?.dzn.border, RightEye?.dzn.border],
-          makula: [leftEye?.makula, RightEye?.makula],
-          periphery: [leftEye?.periphery, RightEye?.periphery],
+          sight_sharpness: [leftEye.sight_sharpness, rightEye.sight_sharpness],
+          color: [leftEye.dzn.color, rightEye.dzn.color],
+          border: [leftEye.dzn.border, rightEye.dzn.border],
+          makula: [leftEye.makula, rightEye.makula],
+          periphery: [leftEye.periphery, rightEye.periphery],
         }}
         enableReinitialize={true}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          await changeExam(values, examId);
+          try {
+            await changeExam(values, leftEye.id, rightEye.id);
+          } catch (e) {
+            toast({
+              title: "Ошибка сохранения данных",
+              status: "error",
+              isClosable: true,
+            });
+          }
           console.log(values);
           onClose();
           setSubmitting(false);
@@ -68,7 +74,7 @@ export const ExamForm: React.FC<Props> = ({ defaultExam, onClose, examId }) => {
         }: FormikProps<ExamFormValues>) => (
           <Form>
             <Box mb="10">
-              <Text fontSize="2xl">Остроа зрения</Text>
+              <Text fontSize="2xl">Острота зрения</Text>
               <Flex justifyContent="space-between">
                 <FieldArray
                   name="color"

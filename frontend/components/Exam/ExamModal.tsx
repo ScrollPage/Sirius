@@ -1,3 +1,4 @@
+import { IDiagnosis } from "@/types/diagnosis";
 import { IExam } from "@/types/exam";
 import {
   Heading,
@@ -7,9 +8,12 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  Spinner,
+  Flex,
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import { Error } from "../UI/Error";
+import { ExamDiagnosForm } from "./ExamDiagnosForm";
 import { ExamForm } from "./ExamForm";
 
 interface Props {
@@ -28,9 +32,7 @@ export const ExamModal: React.FC<Props> = ({ examId, isOpen, onClose }) => {
         </ModalHeader>
         <ModalCloseButton />
 
-        <ModalBody>
-          <Main examId={examId} onClose={onClose} />
-        </ModalBody>
+        <Main examId={examId} onClose={onClose} />
       </ModalContent>
     </Modal>
   );
@@ -42,11 +44,29 @@ interface MainProps {
 }
 
 const Main: React.FC<MainProps> = ({ examId, onClose }) => {
-  const { data: exam, error } = useSWR<IExam>(`/api/exam/${examId}/`);
+  const { data: exam, error: examError } = useSWR<IExam>(
+    `/api/exam/${examId}/`
+  );
+  const { data: diagnosis, error: diagnosisError } = useSWR<IDiagnosis[]>(
+    `/api/exam/${examId}/diagnosis/`
+  );
 
-  if (error) {
+  if (examError || diagnosisError) {
     return <Error>Ошибка при получении информации об ислледовании</Error>;
   }
 
-  return <ExamForm defaultExam={exam} onClose={onClose} examId={examId} />;
+  if (!exam || !diagnosis) {
+    return (
+      <Flex justifyContent="center" h="113.6px" align="center">
+        <Spinner size="xl" />
+      </Flex>
+    );
+  }
+
+  return (
+    <ModalBody>
+      <ExamDiagnosForm examId={examId} />
+      <ExamForm defaultExam={exam} onClose={onClose} />
+    </ModalBody>
+  );
 };
