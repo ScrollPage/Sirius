@@ -59,8 +59,8 @@ export default function Main({ patientPagination }: Props) {
       name__contains: name,
       birth_date__lte: lower,
       birth_date__gte: greater,
-      diagnosis__contains: diagnosis,
-      sub_exams__check_type: type,
+      exams__diagnosis__description__contains: diagnosis,
+      exams__sub_exams__check_type__contains: type,
     }),
     [query]
   );
@@ -116,8 +116,8 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     name__contains: getAsString(ctx.query.name),
     birth_date__lte: getAsString(ctx.query.lower),
     birth_date__gte: getAsString(ctx.query.greater),
-    diagnosis__contains: getAsString(ctx.query.diagnosis),
-    sub_exams__check_type: getAsString(ctx.query.type),
+    exams__diagnosis__description__contains: getAsString(ctx.query.diagnosis),
+    exams__sub_exams__check_type__contains: getAsString(ctx.query.type),
   };
 
   let patientPagination: PatientPagination | null = null;

@@ -22,7 +22,7 @@ export const ExamItem: React.FC<Props> = ({ exam }) => {
             setIsOpen={setIsOpen}
           />
         </Td>
-        <Td>{exam.diagnosis ?? "Отсутствует"}</Td>
+        <Td>{exam.last_diagnosis ?? "Отсутствует"}</Td>
         <Td>{exam.clinic}</Td>
         <Td>{toDate(exam.created)}</Td>
         <Td>{toDate(exam.updated)}</Td>
