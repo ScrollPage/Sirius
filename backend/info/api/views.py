@@ -70,6 +70,7 @@ class RecomedationView(UpdateAPIView):
 
 
 class DiagnosisViewSet(CreateUpdateDEstroyViewSet):
+    '''Создание диагноза'''
     serializer_class = DiagnosisSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Diagnosis.objects.all()
