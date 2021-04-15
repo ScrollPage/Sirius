@@ -244,7 +244,6 @@ CACHEOPS_DEFAULTS = {
 
 CACHEOPS = {
     'patient.Patient': {'ops': 'all'},
-    'exam.Examination': {'ops': 'all'}
 }
 
 # Auth protection
