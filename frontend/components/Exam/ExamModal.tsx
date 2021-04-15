@@ -1,5 +1,6 @@
 import { IExam } from "@/types/exam";
 import {
+  Heading,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -8,6 +9,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import useSWR from "swr";
+import { Error } from "../UI/Error";
 import { ExamForm } from "./ExamForm";
 
 interface Props {
@@ -17,23 +19,34 @@ interface Props {
 }
 
 export const ExamModal: React.FC<Props> = ({ examId, isOpen, onClose }) => {
-  const { data: exam, error } = useSWR<IExam>(`/api/exam/${examId}/`);
-
   return (
-    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+    <Modal size="3xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent p="20px">
-        <ModalHeader>Редактирование</ModalHeader>
+        <ModalHeader>
+          <Heading size="lg">Редактирование</Heading>
+        </ModalHeader>
         <ModalCloseButton />
 
         <ModalBody>
-          <ExamForm
-            examId={examId}
-            defaultExam={!error && exam && exam.diagnosis ? exam.diagnosis : ""}
-            onClose={onClose}
-          />
+          <Main examId={examId} onClose={onClose} />
         </ModalBody>
       </ModalContent>
     </Modal>
   );
+};
+
+interface MainProps {
+  examId: number;
+  onClose: () => void;
+}
+
+const Main: React.FC<MainProps> = ({ examId, onClose }) => {
+  const { data: exam, error } = useSWR<IExam>(`/api/exam/${examId}/`);
+
+  if (error) {
+    return <Error>Ошибка при получении информации об ислледовании</Error>;
+  }
+
+  return <ExamForm defaultExam={exam} onClose={onClose} examId={examId} />;
 };

@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  Select,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 import { Form, Formik, FormikProps } from "formik";
 import React from "react";
 import { MyField } from "@/components/UI/MyField";
@@ -16,8 +8,16 @@ import { SearchIcon } from "@chakra-ui/icons";
 import { object, number } from "yup";
 import { createClearObject } from "@/utils/queryCode";
 import { yearsToDate } from "@/utils/yearsToDate";
+import { Select } from "../UI/CastomSelect";
 
-const types = ["VEP", "ERG", "MERG", "EOG", "SweepVEP", "MVEP"];
+const TYPES = [
+  { id: 1, name: "VEP" },
+  { id: 2, name: "ERG" },
+  { id: 3, name: "MERG" },
+  { id: 4, name: "EOG" },
+  { id: 5, name: "SweepVEP" },
+  { id: 6, name: "MVEP" },
+];
 interface FormValues {
   name?: string;
   lower?: string;
@@ -68,7 +68,7 @@ export const PatientSearchForm = () => {
           setSubmitting(false);
         }}
       >
-        {({ values, setFieldValue, isSubmitting }: FormikProps<FormValues>) => (
+        {({ values, handleChange, isSubmitting }: FormikProps<FormValues>) => (
           <Form>
             <Flex justify="center" flexDirection={["column", "column", "row"]}>
               <Box mr="10px">
@@ -116,23 +116,15 @@ export const PatientSearchForm = () => {
                 />
               </Box>
               <Box mr="10px">
-                <FormControl mt="4" w="100">
-                  <FormLabel>
-                    <Text fontSize="sm">Тип</Text>
-                  </FormLabel>
-                  <Select
-                    size="lg"
-                    value={values.type}
-                    placeholder="Выберите"
-                    onChange={(e) => setFieldValue("type", e.target.value)}
-                  >
-                    {types.map((type, idx) => (
-                      <option key={`type__item__key__${idx}`} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
+                <Select
+                  label="Тип"
+                  name="type"
+                  size="lg"
+                  value={values.type}
+                  placeholder="Выберите"
+                  onChange={handleChange}
+                  data={TYPES}
+                />
               </Box>
               <Button
                 mt="45px"

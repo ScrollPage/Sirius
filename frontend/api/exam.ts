@@ -2,7 +2,15 @@ import { IExam } from '@/types/exam';
 import { GetServerSidePropsContext } from 'next';
 import { request } from './'
 interface ChangeData {
-  diagnosis: string
+  eyes_info: {
+    makula?: string;
+    periphery?: string;
+    sight_sharpness?: number;
+    dzn: {
+      color?: string;
+      border?: string;
+    }
+  }[];
 }
 
 const change = (examId: number, data: ChangeData) => {
