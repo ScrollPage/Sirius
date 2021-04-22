@@ -1,17 +1,20 @@
 from rest_framework import permissions, status
 from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.response import Response
 from rest_framework.mixins import (
     CreateModelMixin, UpdateModelMixin, 
     DestroyModelMixin
 )
 from django.shortcuts import get_object_or_404 
+from django.db.models import Subquery
 
 from .service import SFRetrieveUpdateDestroyCreateViewSet
 from .serializers import ExamSerializer, SubExamSerializer
-from metric.api.serializers import SequenceSerializer
+from metric.api.serializers import SequenceSerializer, PointSerializer
 from exam.models import Examination, SubExam
 from info.api.serializers import DiagnosisSerializer
+from metric.models import Point
 
 class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     '''
@@ -21,7 +24,7 @@ class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     serializer_class = ExamSerializer
     serializer_class_by_action = {
         'sub': SubExamSerializer,
-        'diagnosis': DiagnosisSerializer
+        'diagnosis': DiagnosisSerializer,
     }
     permissions_classes = [permissions.IsAuthenticated]
 
@@ -42,7 +45,8 @@ class ExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
 class SubExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     serializer_class = SubExamSerializer
     serializer_class_by_action = {
-        'sequence': SequenceSerializer
+        'sequence': SequenceSerializer,
+        'points': PointSerializer
     }
     permissions_classes = [permissions.IsAuthenticated]
 
@@ -57,3 +61,14 @@ class SubExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     def sequence(self, request, *args, **kwargs):
         '''Временные ряды исследования'''
         return self.fast_response('sequences')
+
+    @action(detail=True, methods=['get'])
+    def points(self, request, *arhs, **kwargs):
+        # sub_exam = self.get_object()
+        points = Point.objects.filter(
+            sequence__sub_exam__id=kwargs[self.lookup_field]
+        )
+        print(points[0].sequence)
+        print(self.get_serializer())
+        serializer = self.get_serializer(points, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
