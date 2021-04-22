@@ -9,9 +9,13 @@ class PointSerializer(serializers.ModelSerializer):
         model = Point
         exclude = ['id']
         read_only_fields = ['created', 'updated']
+        extra_kwargs = {
+            'sequence': {'write_only': True}
+        }
 
 class SequenceSerializer(serializers.ModelSerializer):
     '''Сериализация временного ряда'''
+    points = PointSerializer(many=True)
 
     class Meta:
         model = Sequence

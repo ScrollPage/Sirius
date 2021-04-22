@@ -61,14 +61,3 @@ class SubExamViewSet(SFRetrieveUpdateDestroyCreateViewSet):
     def sequence(self, request, *args, **kwargs):
         '''Временные ряды исследования'''
         return self.fast_response('sequences')
-
-    @action(detail=True, methods=['get'])
-    def points(self, request, *arhs, **kwargs):
-        # sub_exam = self.get_object()
-        points = Point.objects.filter(
-            sequence__sub_exam__id=kwargs[self.lookup_field]
-        )
-        print(points[0].sequence)
-        print(self.get_serializer())
-        serializer = self.get_serializer(points, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
