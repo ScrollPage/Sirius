@@ -108,7 +108,12 @@ class DiagnosisChoice(ChoiceItem):
 
 class Diagnosis(models.Model):
     '''Модель диагноза'''
+    EYE_CHOICES = (
+        (1, 'Левый'),
+        (2, 'Правый'),
+    )
 
+    side = models.CharField('Тип глаза', max_length=6, default=1)
     name = models.TextField('Название диагноза', default='', max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

@@ -5,7 +5,7 @@ from rest_framework.mixins import (
 )
 
 
-class CreateUpdateDEstroyViewSet(
+class CreateUpdateDestroyViewSet(
     CreateModelMixin, UpdateModelMixin, 
     DestroyModelMixin, GenericViewSet
 ):

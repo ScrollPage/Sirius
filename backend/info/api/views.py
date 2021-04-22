@@ -10,7 +10,7 @@ from ..models import (
     MakulaChoice, PeripheryChoice, ColorChoice, DiagnosisChoice,
     BorderChoice, EyeInfo, DZN, Recomendation, Diagnosis
 )
-from .service import CreateUpdateDEstroyViewSet
+from .service import CreateUpdateDestroyViewSet
 
 
 class MakulaChoiceView(ListAPIView, CreateAPIView):
@@ -69,7 +69,7 @@ class RecomedationView(UpdateAPIView):
     queryset = Recomendation.objects.all()
 
 
-class DiagnosisViewSet(CreateUpdateDEstroyViewSet):
+class DiagnosisViewSet(CreateUpdateDestroyViewSet):
     '''Создание диагноза'''
     serializer_class = DiagnosisSerializer
     permission_classes = [permissions.IsAuthenticated]

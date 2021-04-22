@@ -10,7 +10,6 @@ from ..models import (
 
 class ChoiceItemSeralizer(serializers.Serializer):
     '''Сериализация поля выбора'''
-    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=100)
 
     mapping_dict = {
